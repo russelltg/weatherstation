@@ -28,7 +28,13 @@ func setupDatabase() *sql.DB {
 	if !dbExists {
 		// create the data table of the format:
 		// KEY (id) | Station Name (string) | Time (integer, secs since unix epoch) | Temp (float, deg C)
-		sql := "CREATE TABLE weather (id INTEGER NOT NULL PRIMARY KEY, station TEXT, time UNSIGNED BIG INT, temp REAL)"
+		sql := `CREATE TABLE weather (
+				id INTEGER NOT NULL PRIMARY KEY, 
+				station TEXT, 
+				time UNSIGNED BIG INT, 
+				sensor TEXT, 
+				reading REAL
+			)`
 		_, err = db.Exec(sql)
 		if err != nil {
 			log.Fatal(err)
@@ -44,9 +50,10 @@ func main() {
 
 	wshandler := &HandleWs{
 		websocket.Upgrader{},
-		map[net.Addr]*websocket.Conn{},
+		map[net.Addr]WsConn{},
 	}
 
+	http.Handle("/sensors", &SensorsHandler{db})
 	http.Handle("/data", &HandleData{db, wshandler})
 	http.Handle("/ws", wshandler)
 

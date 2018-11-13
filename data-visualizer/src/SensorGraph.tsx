@@ -25,7 +25,9 @@ class SensorGraph extends React.Component<Props> {
                 datasets: [{
                     label: 'Temp (\u00b0 C)',
                     data: [],
-                    fill: true
+                    fill: true,
+                    borderColor: '#ff6961',
+                    backgroundColor: '#db898455'
                 }]
             },
             options: {
@@ -33,17 +35,15 @@ class SensorGraph extends React.Component<Props> {
                 title: {
                     display: true,
                     text: this.props.name,
-
                 },
                 scales: {
                     xAxes: [{
+                        type: 'time',
+                        // distribution: "series",
                         display: true,
                         scaleLabel: {
                             display: true,
                             labelString: 'Time',
-                        },
-                        ticks: {
-                            autoSkipPadding: 10,
                         }
                     }],
                     yAxes: [{
@@ -51,9 +51,6 @@ class SensorGraph extends React.Component<Props> {
                         scaleLabel: {
                             display: true,
                             labelString: 'Temperature (\u00b0 C)'
-                        },
-                        ticks: {
-                            autoSkipPadding: 10,
                         }
                     }]
                 },
@@ -81,7 +78,7 @@ class SensorGraph extends React.Component<Props> {
         }
 
         if (this.chart !== undefined && this.chart.data.datasets !== undefined) {
-            this.chart.data.datasets[0].data = oldData.map(elem => ({ x: elem.time - 1541816450, y: elem.temp }));
+            this.chart.data.datasets[0].data = oldData.map(elem => ({ x: new Date(elem.time * 1000), y: elem.temp }));
             this.chart.update();
         }
 
@@ -103,7 +100,7 @@ class SensorGraph extends React.Component<Props> {
         const tempData = datasets[0].data as ChartPoint[];
         if (tempData === undefined) { return; }
 
-        tempData.push({ x: dataPoint.time - 1541816450, y: dataPoint.temp });
+        tempData.push({ x: new Date(dataPoint.time * 1000), y: dataPoint.temp });
         this.chart.update();
     }
 

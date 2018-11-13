@@ -13,16 +13,19 @@ import (
 	"time"
 )
 
+// HandleData implementes http.Handler that handles /data routes
 type HandleData struct {
 	db *sql.DB
 	ws *HandleWs
 }
 
+// WeatherRow reflects database entries
 type WeatherRow struct {
 	Station string `json:"station"`
 	/// Time since unix epoch, utc
-	Time int64   `json:"time"`
-	Temp float32 `json:"temp"`
+	Time    int64   `json:"time"`
+	Sensor  string  `json:"sensor"`
+	Reading float32 `json:"reading"`
 }
 
 func (h *HandleData) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -30,11 +33,12 @@ func (h *HandleData) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 
-		start_str := r.URL.Query().Get("start")
-		end_str := r.URL.Query().Get("end")
-		station_str := r.URL.Query().Get("station")
+		startStr := r.URL.Query().Get("start")
+		endStr := r.URL.Query().Get("end")
+		stationStr := r.URL.Query().Get("station")
+		sensorStr := r.URL.Query().Get("sensor")
 
-		if start_str == "" {
+		if startStr == "" {
 			// invalud request, must have start
 			http.Error(w, "Bad request, must have start", http.StatusBadRequest)
 			return
@@ -42,16 +46,17 @@ func (h *HandleData) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		// convert start_str and end_str to integers. strconv.Atoi only
 		// outputs int, but we need int64, so we have to use ParseInt
-		start, err := strconv.ParseInt(start_str, 10, 64)
+		start, err := strconv.ParseInt(startStr, 10, 64)
 		if err != nil {
 			http.Error(w, "Bad request, start must be a number", http.StatusBadRequest)
 			return
 		}
 
 		// end is optional, so only parse it if it's not empty
+		// maxiumum int64 is a sane defualt, as it will capture until the end of time
 		var end int64 = math.MaxInt64
-		if end_str != "" {
-			end, err = strconv.ParseInt(end_str, 10, 64)
+		if endStr != "" {
+			end, err = strconv.ParseInt(endStr, 10, 64)
 			if err != nil {
 				http.Error(w, "Bad request, end must be a number", http.StatusBadRequest)
 				return
@@ -59,10 +64,10 @@ func (h *HandleData) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// convert start and end into time points. They are in seconds since the unix epoch
-		start_time := time.Unix(start, 0)
-		end_time := time.Unix(end, 0)
+		startTime := time.Unix(start, 0)
+		endTime := time.Unix(end, 0)
 
-		h.handleGet(start_time, end_time, station_str, w)
+		h.handleGet(startTime, endTime, stationStr, sensorStr, w)
 
 	case "POST":
 		// decode the posted json
@@ -75,17 +80,21 @@ func (h *HandleData) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *HandleData) handleGet(start time.Time, end time.Time, station string, w http.ResponseWriter) {
-	query := `SELECT station, time, temp FROM weather WHERE ? <= time AND time < ?`
+func (h *HandleData) handleGet(start time.Time, end time.Time, station string, sensor string, w http.ResponseWriter) {
+	query := `SELECT station, time, sensor, reading FROM weather WHERE ? <= time AND time < ?`
+	parameters := []interface{}{start.Unix(), end.Unix()}
 
-	var rows *sql.Rows
-	var err error
 	if station != "" {
 		query += " AND station = ?"
-		rows, err = h.db.Query(query, start.Unix(), end.Unix(), station)
-	} else {
-		rows, err = h.db.Query(query, start.Unix(), end.Unix())
+		parameters = append(parameters, station)
 	}
+
+	if sensor != "" {
+		query += " AND sensor = ?"
+		parameters = append(parameters, sensor)
+	}
+
+	rows, err := h.db.Query(query, parameters...)
 
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to query rows: %s", err), http.StatusInternalServerError)
@@ -99,7 +108,7 @@ func (h *HandleData) handleGet(start time.Time, end time.Time, station string, w
 
 	for rows.Next() {
 		row := WeatherRow{}
-		err = rows.Scan(&row.Station, &row.Time, &row.Temp)
+		err = rows.Scan(&row.Station, &row.Time, &row.Sensor, &row.Reading)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Faield to scan row: %s", err), http.StatusInternalServerError)
 		}
@@ -109,9 +118,9 @@ func (h *HandleData) handleGet(start time.Time, end time.Time, station string, w
 
 	// serialize the JSON
 	buffer := bytes.NewBuffer([]byte{})
-	json_encoder := json.NewEncoder(buffer)
+	jsonEncoder := json.NewEncoder(buffer)
 
-	err = json_encoder.Encode(ret)
+	err = jsonEncoder.Encode(ret)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to encode json: %s", err), http.StatusInternalServerError)
 	}
@@ -132,14 +141,14 @@ func (h *HandleData) handlePost(body io.Reader, w http.ResponseWriter) {
 		http.Error(w, fmt.Sprintf("Failed to decode json: %s", err), http.StatusBadRequest)
 	}
 
-	log.Printf("Received new datapoint: %s, %.0f deg C", weather.Station, weather.Temp)
+	log.Printf("Received new datapoint from %s, %s=%.2f", weather.Station, weather.Sensor, weather.Reading)
 
 	// add it to the database
 	_, err = h.db.Exec(`
 		INSERT INTO weather
-			(station, time, temp) VALUES
+			(station, time, sensor, reading) VALUES
 			(?, ?, ?)
-	`, weather.Station, weather.Time, weather.Temp)
+	`, weather.Station, weather.Time, weather.Sensor, weather.Reading)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to execute sql %s", err), http.StatusInternalServerError)
 		return
@@ -147,6 +156,8 @@ func (h *HandleData) handlePost(body io.Reader, w http.ResponseWriter) {
 
 	// send the message to the websocket subscribers
 	for _, v := range h.ws.connections {
-		v.WriteJSON(weather)
+		if v.Filter(weather) {
+			v.Connection.WriteJSON(weather)
+		}
 	}
 }
