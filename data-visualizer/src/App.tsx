@@ -7,6 +7,7 @@ class App extends React.Component {
   public render() {
     return (
       <div className="App">
+        <h1> Weather Station Data </h1>
         <SensorGrid />
       </div >
     );
