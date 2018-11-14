@@ -16,16 +16,17 @@ class SensorGrid extends React.Component<{}, State> {
         this.fetchSensors();
     }
 
+    public render() {
+        return <>
+            {this.state.sensors.map(val => (<SensorGraph key={val} sensor={val} />))}
+        </>;
+    }
+
     private async fetchSensors() {
         const sensorList = await WebRequest.json<string[]>(
             `${window.location.origin}/sensors`);
 
         this.setState({ sensors: sensorList });
-    }
-
-    public render() {
-        //return <>{this.state.sensors.map(val => (<SensorGraph sensor={val} />))}</>;
-        return <></>;
     }
 }
 

@@ -2,9 +2,11 @@ import { Chart, ChartPoint } from 'chart.js';
 import * as React from 'react';
 import * as WebRequest from "web-request";
 import { SensorReading } from './SensorData';
+import './SensorTitles';
+import sensorTitles from './SensorTitles';
 
 interface Props {
-    name: string;
+    sensor: string;
 }
 
 class SensorGraph extends React.Component<Props> {
@@ -23,7 +25,7 @@ class SensorGraph extends React.Component<Props> {
             type: 'line',
             data: {
                 datasets: [{
-                    label: 'Temp (\u00b0 C)',
+                    label: `${sensorTitles[this.props.sensor].displayName}`,
                     data: [],
                     fill: true,
                     borderColor: '#ff6961',
@@ -31,10 +33,10 @@ class SensorGraph extends React.Component<Props> {
                 }]
             },
             options: {
-                responsive: true,
+                responsive: false,
                 title: {
                     display: true,
-                    text: this.props.name,
+                    text: this.props.sensor,
                 },
                 scales: {
                     xAxes: [{
@@ -50,7 +52,7 @@ class SensorGraph extends React.Component<Props> {
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Temperature (\u00b0 C)'
+                            labelString: `${sensorTitles[this.props.sensor].displayName} (${sensorTitles[this.props.sensor].units})`
                         }
                     }]
                 },
@@ -64,26 +66,27 @@ class SensorGraph extends React.Component<Props> {
     }
 
     public render() {
-        return <canvas height="200" ref={e => { if (e != null) { this.chartElement = e; } }} />;
+        return <div>
+            <canvas width="600px" height="400px" ref={e => { if (e != null) { this.chartElement = e; } }} />
+        </div >;
     }
-
 
     private async startLoadingResources() {
 
         // fetch the last day of data
         const oldData = await WebRequest.json<SensorReading[]>(
-            `${window.location.origin}/data?start=${Math.round((new Date()).getTime() / 1000 - 3600 * 24)}&station=${encodeURIComponent(this.props.name)}`)
+            `${window.location.origin}/data?start=${Math.round((new Date()).getTime() / 1000 - 3600 * 24)}&sensor=${encodeURIComponent(this.props.sensor)}`)
         if (oldData === undefined) {
             return;
         }
 
         if (this.chart !== undefined && this.chart.data.datasets !== undefined) {
-            this.chart.data.datasets[0].data = oldData.map(elem => ({ x: new Date(elem.time * 1000), y: elem.temp }));
+            this.chart.data.datasets[0].data = oldData.map(elem => ({ x: new Date(elem.time * 1000), y: elem.reading }));
             this.chart.update();
         }
 
         // subscribe to the websockt
-        const ws = new WebSocket(`ws://${window.location.hostname}:${window.location.port}/ws`)
+        const ws = new WebSocket(`ws://${window.location.hostname}:${window.location.port}/ws?sensor=${encodeURIComponent(this.props.sensor)}`)
         ws.onmessage = event => {
             this.addDataPoint(JSON.parse(event.data));
         }
@@ -97,10 +100,10 @@ class SensorGraph extends React.Component<Props> {
         const datasets = this.chart.data.datasets;
         if (datasets === undefined) { return; }
 
-        const tempData = datasets[0].data as ChartPoint[];
-        if (tempData === undefined) { return; }
+        const sensorData = datasets[0].data as ChartPoint[];
+        if (sensorData === undefined) { return; }
 
-        tempData.push({ x: new Date(dataPoint.time * 1000), y: dataPoint.temp });
+        sensorData.push({ x: new Date(dataPoint.time * 1000), y: dataPoint.reading });
         this.chart.update();
     }
 

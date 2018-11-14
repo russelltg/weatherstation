@@ -2,7 +2,8 @@
 interface SensorReading {
     station: string,
     time: number,
-    temp: number,
+    sensor: string,
+    reading: number,
 }
 
 export { SensorReading };

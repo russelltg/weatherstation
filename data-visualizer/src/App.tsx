@@ -1,13 +1,13 @@
 import * as React from 'react';
 import './App.css';
 import './SensorGraph';
-import SensorGraph from './SensorGraph';
+import SensorGrid from './SensorGrid';
 
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
-        <SensorGraph name="Station 1" />
+        <SensorGrid />
       </div >
     );
   }
