@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gobuffalo/packr"
 	"github.com/gorilla/websocket"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -53,9 +54,15 @@ func main() {
 		map[net.Addr]WsConn{},
 	}
 
+	box := packr.NewBox("../data-visualizer/build")
+
+	dataHandle := &HandleData{db, wshandler}
+	dataHandle.retreiveWs([]string{})
+
 	http.Handle("/sensors", &SensorsHandler{db})
-	http.Handle("/data", &HandleData{db, wshandler})
+	http.Handle("/data", dataHandle)
 	http.Handle("/ws", wshandler)
+	http.Handle("/", http.FileServer(box))
 
 	log.Printf("Starting server on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

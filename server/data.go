@@ -11,6 +11,8 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 // HandleData implementes http.Handler that handles /data routes
@@ -70,6 +72,7 @@ func (h *HandleData) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h.handleGet(startTime, endTime, stationStr, sensorStr, w)
 
 	case "POST":
+
 		// decode the posted json
 		body := r.Body
 		if body == nil {
@@ -130,7 +133,6 @@ func (h *HandleData) handleGet(start time.Time, end time.Time, station string, s
 }
 
 func (h *HandleData) handlePost(body io.Reader, w http.ResponseWriter) {
-
 	decoder := json.NewDecoder(body)
 
 	weather := WeatherRow{
@@ -141,23 +143,70 @@ func (h *HandleData) handlePost(body io.Reader, w http.ResponseWriter) {
 		http.Error(w, fmt.Sprintf("Failed to decode json: %s", err), http.StatusBadRequest)
 	}
 
+	err = h.handleNewData(weather)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+// Handle new data that has been sent
+func (h *HandleData) handleNewData(weather WeatherRow) error {
+
 	log.Printf("Received new datapoint from %s, %s=%.2f", weather.Station, weather.Sensor, weather.Reading)
 
 	// add it to the database
-	_, err = h.db.Exec(`
+	_, err := h.db.Exec(`
 		INSERT INTO weather
 			(station, time, sensor, reading) VALUES
-			(?, ?, ?)
+			(?, ?, ?, ?)
 	`, weather.Station, weather.Time, weather.Sensor, weather.Reading)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to execute sql %s", err), http.StatusInternalServerError)
-		return
+		return fmt.Errorf("Failed to execute sql %s", err)
 	}
 
 	// send the message to the websocket subscribers
 	for _, v := range h.ws.connections {
 		if v.Filter(weather) {
+
 			v.Connection.WriteJSON(weather)
 		}
+	}
+	return nil
+}
+
+func (h *HandleData) retreiveWs(conns []string) {
+	for _, addr := range conns {
+		conn, _, err := websocket.DefaultDialer.Dial(addr, nil)
+		if err != nil {
+			log.Printf("Faield to dial to sensor station %s", err)
+			continue
+		}
+
+		go func() {
+			for {
+				ty, message, err := conn.ReadMessage()
+				if err != nil {
+					log.Printf("Connection closed")
+					break
+				}
+				if ty != websocket.TextMessage {
+					log.Printf("Unexpected message type: %d", ty)
+					continue
+				}
+
+				// deserialize the JSON
+				decoder := json.NewDecoder(bytes.NewBuffer(message))
+
+				weather := WeatherRow{
+					Time: time.Now().Unix(), // set the time to now, as the JSON doens't have time
+				}
+				err = decoder.Decode(&weather)
+				if err != nil {
+					log.Printf("Failed to decode json from %s : %s", conn.RemoteAddr(), err)
+				}
+
+				h.handleNewData(weather)
+			}
+		}()
 	}
 }
