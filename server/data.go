@@ -11,14 +11,13 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-
-	"github.com/gorilla/websocket"
 )
 
 // HandleData implementes http.Handler that handles /data routes
 type HandleData struct {
-	db *sql.DB
-	ws *HandleWs
+	db     *sql.DB
+	ws     *HandleWs
+	recvrs []*TcpRecvr
 }
 
 // WeatherRow reflects database entries
@@ -174,39 +173,27 @@ func (h *HandleData) handleNewData(weather WeatherRow) error {
 	return nil
 }
 
-func (h *HandleData) retreiveWs(conns []string) {
-	for _, addr := range conns {
-		conn, _, err := websocket.DefaultDialer.Dial(addr, nil)
+func (h *HandleData) AddTcpRecvr(url string) {
+	h.recvrs = append(h.recvrs, NewTcpRecvr(url, h))
+}
+
+func (h *HandleData) StartTcpRecvrsFromDb() {
+	query := `
+		SELECT (url) FROM stations
+	`
+	rows, err := h.db.Query(query)
+	if err != nil {
+		log.Printf("Failed to excute query: %s", err)
+		return
+	}
+
+	for rows.Next() {
+		var ip string
+		err := rows.Scan(&ip)
 		if err != nil {
-			log.Printf("Faield to dial to sensor station %s", err)
+			log.Printf("Failed to scan row: %s", err)
 			continue
 		}
-
-		go func() {
-			for {
-				ty, message, err := conn.ReadMessage()
-				if err != nil {
-					log.Printf("Connection closed")
-					break
-				}
-				if ty != websocket.TextMessage {
-					log.Printf("Unexpected message type: %d", ty)
-					continue
-				}
-
-				// deserialize the JSON
-				decoder := json.NewDecoder(bytes.NewBuffer(message))
-
-				weather := WeatherRow{
-					Time: time.Now().Unix(), // set the time to now, as the JSON doens't have time
-				}
-				err = decoder.Decode(&weather)
-				if err != nil {
-					log.Printf("Failed to decode json from %s : %s", conn.RemoteAddr(), err)
-				}
-
-				h.handleNewData(weather)
-			}
-		}()
+		h.AddTcpRecvr(ip)
 	}
 }

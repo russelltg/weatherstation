@@ -29,17 +29,30 @@ func setupDatabase() *sql.DB {
 	if !dbExists {
 		// create the data table of the format:
 		// KEY (id) | Station Name (string) | Time (integer, secs since unix epoch) | Temp (float, deg C)
-		sql := `CREATE TABLE weather (
+		sqlWeather := `CREATE TABLE weather (
 				id INTEGER NOT NULL PRIMARY KEY, 
 				station TEXT, 
 				time UNSIGNED BIG INT, 
 				sensor TEXT, 
 				reading REAL
 			)`
-		_, err = db.Exec(sql)
+		_, err = db.Exec(sqlWeather)
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		sqlStations := `
+			CREATE TABLE stations (
+				id INTEGER NOT NULL PRIMARY KEY,
+				name TEXT,
+				ip TEXT
+			)
+		`
+		_, err = db.Exec(sqlStations)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 	}
 
 	return db
@@ -56,9 +69,10 @@ func main() {
 
 	box := packr.NewBox("../data-visualizer/build")
 
-	dataHandle := &HandleData{db, wshandler}
-	dataHandle.retreiveWs([]string{})
+	dataHandle := &HandleData{db, wshandler, []*TcpRecvr{}}
 
+	// http.Handle("/stations", &StationsHandle{db})
+	http.Handle("/stations", &StationsHandler{db, dataHandle})
 	http.Handle("/sensors", &SensorsHandler{db})
 	http.Handle("/data", dataHandle)
 	http.Handle("/ws", wshandler)
