@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as WebRequest from "web-request";
 import { SensorReading } from './SensorData';
 import './SensorTitles';
-import sensorTitles from './SensorTitles';
+import { units, displayName } from './SensorTitles';
 
 interface Props {
     sensor: string;
@@ -25,7 +25,7 @@ class SensorGraph extends React.Component<Props> {
             type: 'line',
             data: {
                 datasets: [{
-                    label: `${sensorTitles[this.props.sensor].displayName}`,
+                    label: `${displayName(this.props.sensor)}`,
                     data: [],
                     fill: true,
                     borderColor: '#ff6961',
@@ -46,13 +46,18 @@ class SensorGraph extends React.Component<Props> {
                         scaleLabel: {
                             display: true,
                             labelString: 'Time',
-                        }
+                        },
+
                     }],
                     yAxes: [{
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: `${sensorTitles[this.props.sensor].displayName} (${sensorTitles[this.props.sensor].units})`
+                            labelString: `${displayName(this.props.sensor)} ${units(this.props.sensor)}`
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMax: 10,
                         }
                     }]
                 },

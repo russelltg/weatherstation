@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.5.1",
+    "@material-ui/icons": "^3.0.1",
     "@types/chart.js": "^2.7.40",
     "chart.js": "^2.7.3",
     "react": "^16.6.1",

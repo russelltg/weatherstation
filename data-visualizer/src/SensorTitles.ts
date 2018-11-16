@@ -8,4 +8,21 @@ const sensorTitles = {
         units: "Bars", // TODO: is this the right pressure unit to use?
     }
 };
-export default sensorTitles;
+
+function displayName(sensor: string) {
+    if (sensorTitles[sensor] !== undefined) {
+        return sensorTitles[sensor].displayName
+    } else {
+        return sensor;
+    }
+}
+
+function units(sensor: string) {
+    if (sensorTitles[sensor] !== undefined) {
+        return `(${sensorTitles[sensor].units})`;
+    } else {
+        return '';
+    }
+}
+
+export { displayName, units };
