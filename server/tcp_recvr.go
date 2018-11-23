@@ -11,15 +11,17 @@ import (
 )
 
 type TcpRecvr struct {
-	url  string
+	ip   string
+	name string
 	data *HandleData
 	// atomic
 	cancelFlag int32
 }
 
-func NewTcpRecvr(url string, data *HandleData) *TcpRecvr {
+func NewTcpRecvr(ip string, name string, data *HandleData) *TcpRecvr {
 	return &TcpRecvr{
-		url,
+		ip,
+		name,
 		data,
 		0,
 	}
@@ -35,7 +37,7 @@ func (t *TcpRecvr) Receive() {
 			break
 		}
 
-		conn, err := net.Dial("tcp", t.url+":2000")
+		conn, err := net.Dial("tcp", t.ip+":2000")
 		if err != nil {
 			continue
 		}
@@ -50,11 +52,12 @@ func (t *TcpRecvr) Receive() {
 			scanner.Text()
 			decoder := json.NewDecoder(bytes.NewBufferString(scanner.Text()))
 			weather := WeatherRow{
-				Time: time.Now().Unix(),
+				Time:    time.Now().Unix(),
+				Station: t.name,
 			}
 			err = decoder.Decode(&weather)
 			if err != nil {
-				log.Printf("Failed to decode JSON from %v: %s", t.url, err)
+				log.Printf("Failed to decode JSON from %v: %s", t.ip, err)
 				continue
 			}
 

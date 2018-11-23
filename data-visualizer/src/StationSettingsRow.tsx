@@ -4,14 +4,18 @@ import { TableCell, IconButton, TableRow, TextField } from '@material-ui/core';
 
 import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 interface Props {
   nickname: string,
   ip: string,
+  refreshEvent: () => void,
 }
 
 interface State {
-  state: 'default' | 'editing' | 'changing';
+  state: 'default' | 'editing' | 'changing',
+  name: string,
+  ip: string,
 }
 
 class StationSettingsRow extends React.Component<Props, State> {
@@ -21,6 +25,8 @@ class StationSettingsRow extends React.Component<Props, State> {
 
     this.state = {
       state: 'default',
+      name: props.nickname,
+      ip: props.ip,
     };
   }
 
@@ -32,19 +38,16 @@ class StationSettingsRow extends React.Component<Props, State> {
           <TableCell>{this.props.nickname}</TableCell>
           <TableCell>{this.props.ip}</TableCell>
           <TableCell><IconButton onClick={this.onClick}><EditIcon /></IconButton></TableCell>
+          <TableCell><IconButton onClick={this.onDelete}><DeleteIcon /></IconButton></TableCell>
         </TableRow>;
-      case 'editing':
+      default:
+        const disabled = this.state.state === 'changing';
         return <TableRow>
-          <TableCell><TextField /></TableCell>
-          <TableCell><TextField /></TableCell>
-          <TableCell><IconButton onClick={this.onClick}><CheckIcon /></IconButton></TableCell>
+          <TableCell><TextField disabled={disabled} value={this.state.name} onChange={this.onNameChange} /></TableCell>
+          <TableCell><TextField disabled={disabled} value={this.state.ip} onChange={this.onIPChange} /></TableCell>
+          <TableCell><IconButton disabled={disabled} onClick={this.onClick}><CheckIcon /></IconButton></TableCell>
+          <TableCell />
         </TableRow>;
-      case 'changing':
-        return <TableRow>
-          <TableCell><TextField disabled /></TableCell>
-          <TableCell><TextField disabled /></TableCell>
-          <TableCell><IconButton disabled><CheckIcon /></IconButton></TableCell>
-        </TableRow>
     }
   }
 
@@ -54,14 +57,49 @@ class StationSettingsRow extends React.Component<Props, State> {
         this.setState({ state: 'editing' });
         break;
       case 'editing':
-        const response = await WebRequest.delete(
+        this.setState({ state: 'changing' });
+        const delResponse = await WebRequest.delete(
           `${window.location.origin}/stations?name=${encodeURIComponent(this.props.nickname)}`)
 
-        if (response.statusCode !== 200) {
-
+        if (delResponse.statusCode !== 200) {
+          this.setState({
+            state: 'default',
+            name: this.props.nickname,
+            ip: this.props.ip,
+          });
+          return;
         }
+
+        const addResponse = await WebRequest.put(
+          `${window.location.origin}/stations?name=${encodeURIComponent(this.state.name)}&ip=${encodeURIComponent(this.state.ip)}`);
+
+        if (addResponse.statusCode !== 200) {
+          this.setState({
+            state: 'default',
+            name: this.props.nickname,
+            ip: this.props.ip,
+          });
+          return;
+        }
+        this.setState({
+          state: 'default',
+        })
+        this.props.refreshEvent();
     }
   };
+
+  private onDelete = async () => {
+    await WebRequest.delete(
+      `${window.location.origin}/stations?name=${encodeURIComponent(this.props.nickname)}`)
+    this.props.refreshEvent();
+  }
+
+  private onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ name: event.target.value });
+  }
+  private onIPChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ ip: event.target.value });
+  }
 }
 
 

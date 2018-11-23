@@ -69,7 +69,8 @@ func main() {
 
 	box := packr.NewBox("../data-visualizer/build")
 
-	dataHandle := &HandleData{db, wshandler, []*TcpRecvr{}}
+	dataHandle := &HandleData{db, wshandler, map[string]*TcpRecvr{}}
+	dataHandle.StartTcpRecvrsFromDb()
 
 	// http.Handle("/stations", &StationsHandle{db})
 	http.Handle("/stations", &StationsHandler{db, dataHandle})

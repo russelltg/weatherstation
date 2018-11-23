@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"math"
 	"net/http"
@@ -17,7 +16,7 @@ import (
 type HandleData struct {
 	db     *sql.DB
 	ws     *HandleWs
-	recvrs []*TcpRecvr
+	recvrs map[string]*TcpRecvr
 }
 
 // WeatherRow reflects database entries
@@ -69,16 +68,6 @@ func (h *HandleData) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		endTime := time.Unix(end, 0)
 
 		h.handleGet(startTime, endTime, stationStr, sensorStr, w)
-
-	case "POST":
-
-		// decode the posted json
-		body := r.Body
-		if body == nil {
-			http.Error(w, "Bad post request, no body", http.StatusBadRequest)
-			return
-		}
-		h.handlePost(body, w)
 	}
 }
 
@@ -131,23 +120,6 @@ func (h *HandleData) handleGet(start time.Time, end time.Time, station string, s
 	w.Write(buffer.Bytes())
 }
 
-func (h *HandleData) handlePost(body io.Reader, w http.ResponseWriter) {
-	decoder := json.NewDecoder(body)
-
-	weather := WeatherRow{
-		Time: time.Now().Unix(), // set the time to now, as the JSON doens't have time
-	}
-	err := decoder.Decode(&weather)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to decode json: %s", err), http.StatusBadRequest)
-	}
-
-	err = h.handleNewData(weather)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
 // Handle new data that has been sent
 func (h *HandleData) handleNewData(weather WeatherRow) error {
 
@@ -173,27 +145,31 @@ func (h *HandleData) handleNewData(weather WeatherRow) error {
 	return nil
 }
 
-func (h *HandleData) AddTcpRecvr(url string) {
-	h.recvrs = append(h.recvrs, NewTcpRecvr(url, h))
+func (h *HandleData) AddTcpRecvr(ip string, name string) {
+	h.recvrs[name] = NewTcpRecvr(ip, name, h)
+	go h.recvrs[name].Receive()
 }
 
 func (h *HandleData) StartTcpRecvrsFromDb() {
 	query := `
-		SELECT (url) FROM stations
+		SELECT ip, name
+		FROM stations
 	`
 	rows, err := h.db.Query(query)
 	if err != nil {
-		log.Printf("Failed to excute query: %s", err)
+		log.Printf("Failed to execute query: %s", err)
 		return
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var ip string
-		err := rows.Scan(&ip)
+		var name string
+		err := rows.Scan(&ip, &name)
 		if err != nil {
 			log.Printf("Failed to scan row: %s", err)
 			continue
 		}
-		h.AddTcpRecvr(ip)
+		h.AddTcpRecvr(ip, name)
 	}
 }

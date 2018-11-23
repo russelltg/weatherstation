@@ -5,12 +5,8 @@ import SensorGrid from './SensorGrid';
 import { AppBar, IconButton, Toolbar, Typography, WithStyles, createStyles, withStyles } from '@material-ui/core';
 
 import MenuIcon from '@material-ui/icons/Menu';
-import SettingsIcon from '@material-ui/icons/Settings';
 import SettingsDialog from './SettingsDialog';
 
-interface State {
-  settingsOpen: boolean,
-}
 
 const styles = createStyles({
   grow: {
@@ -18,13 +14,9 @@ const styles = createStyles({
   }
 });
 
-class App extends React.Component<WithStyles<typeof styles>, State> {
+class App extends React.Component<WithStyles<typeof styles>, {}> {
   public constructor(props: WithStyles<typeof styles>) {
     super(props);
-
-    this.state = {
-      settingsOpen: false,
-    };
   }
 
   public render() {
@@ -36,20 +28,13 @@ class App extends React.Component<WithStyles<typeof styles>, State> {
               <MenuIcon />
             </IconButton>
             <Typography className={this.props.classes.grow} variant="h6" color="inherit">Weather Station</Typography>
-            <IconButton onClick={this.openSettings}><SettingsIcon /></IconButton>
+            <SettingsDialog />
           </Toolbar>
         </AppBar>
         <SensorGrid />
-        <SettingsDialog open={this.state.settingsOpen} />
       </div >
     );
   }
-
-  private openSettings = () => {
-    this.setState({
-      settingsOpen: true,
-    })
-  };
 }
 
 export default withStyles(styles)(App);

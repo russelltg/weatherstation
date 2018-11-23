@@ -35,6 +35,7 @@ func (h *StationsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, fmt.Sprintf("Failed to query DB: %s", err), http.StatusInternalServerError)
 			return
 		}
+		defer rows.Close()
 		stations := []stationsRow{}
 		for rows.Next() {
 			var row stationsRow
@@ -76,6 +77,7 @@ func (h *StationsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				aeName, aeIP, name, ip), http.StatusConflict)
 			return
 		}
+		rows.Close()
 
 		query = `
 			INSERT INTO stations 
@@ -89,7 +91,7 @@ func (h *StationsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// start it
-		h.data.AddTcpRecvr(ip)
+		h.data.AddTcpRecvr(ip, name)
 
 		log.Printf("Added Station: IP=%s, name=%s", ip, name)
 
@@ -98,22 +100,20 @@ func (h *StationsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Empty name parameter", http.StatusBadRequest)
 			return
 		}
+
 		query := `
-				DELETE FROM stations WHERE name=?
+				DELETE FROM stations
+				WHERE name=?
 			`
-		res, err := h.db.Exec(query, name)
+		_, err := h.db.Exec(query, name)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Failed to delete station: %s", err), http.StatusInternalServerError)
 			return
 		}
-		rows, err := res.RowsAffected()
-		if err != nil {
-			http.Error(w, fmt.Sprintf("Failed to get rows affected: %s", err), http.StatusInternalServerError)
-			return
-		}
-		if rows == 0 {
-			http.Error(w, fmt.Sprintf("Tryed to delete station: %s, did not exist", name), http.StatusNotFound)
-			return
-		}
+
+		log.Printf("Deleting station %s", ip)
+
+		h.data.recvrs[name].Cancel()
+		delete(h.data.recvrs, name)
 	}
 }

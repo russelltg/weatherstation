@@ -20,11 +20,11 @@ func (h *SensorsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	query := `SELECT DISTINCT sensor FROM weather`
 	rows, err := h.db.Query(query)
-
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to query database: %s", err), http.StatusInternalServerError)
 		return
 	}
+	defer rows.Close()
 
 	sensors := []string{}
 	for rows.Next() {

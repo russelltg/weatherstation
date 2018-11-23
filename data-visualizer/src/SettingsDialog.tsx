@@ -2,16 +2,15 @@ import * as React from 'react';
 import * as WebRequest from "web-request";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Table, TableHead, Typography, TableRow, TableCell, IconButton, TableBody } from '@material-ui/core';
 
-import SaveIcon from '@material-ui/icons/Save';
+import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
-import StationSettingsRow from './StationSettingsRow';
+import SettingsIcon from '@material-ui/icons/Settings';
 
-interface Props {
-  open: boolean,
-};
+import StationSettingsRow from './StationSettingsRow';
 
 interface State {
   stations: Station[]
+  open: boolean,
 }
 
 interface Station {
@@ -19,49 +18,55 @@ interface Station {
   ip: string,
 }
 
-class SettingsDialog extends React.Component<Props, State> {
-  public constructor(props: Props) {
+class SettingsDialog extends React.Component<{}, State> {
+  public constructor(props: {}) {
     super(props);
 
     this.state = {
-      stations: []
+      stations: [],
+      open: false,
     };
 
     this.fetchStations();
   }
 
   public render() {
-    return <Dialog open={this.props.open}>
-      <DialogTitle>Settings</DialogTitle>
-      <DialogContent>
-        <Typography variant="subheading">Connected Stations</Typography>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Nickname</TableCell>
-              <TableCell>IP</TableCell>
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.state.stations.map(s => (<StationSettingsRow key={s.name} nickname={s.name} ip={s.ip} />))}
-            <TableRow>
-              <TableCell />
-              <TableCell />
-              <TableCell>
-                <IconButton onClick={this.addStation}><AddIcon /></IconButton>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </DialogContent>
-      <DialogActions>
-        <Button><SaveIcon />Save</Button>
-      </DialogActions>
-    </Dialog>
+    return <>
+      <IconButton onClick={this.openDialog}><SettingsIcon /></IconButton>
+      <Dialog open={this.state.open}>
+        <DialogTitle>Settings</DialogTitle>
+        <DialogContent>
+          <Typography variant="subheading">Connected Stations</Typography>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nickname</TableCell>
+                <TableCell>IP</TableCell>
+                <TableCell />
+                <TableCell />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.stations.map(s => (<StationSettingsRow key={s.name} nickname={s.name} ip={s.ip} refreshEvent={this.fetchStations} />))}
+              <TableRow>
+                <TableCell />
+                <TableCell />
+                <TableCell />
+                <TableCell>
+                  <IconButton onClick={this.addStation}><AddIcon /></IconButton>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.onSave}><CheckIcon />Ok</Button>
+        </DialogActions>
+      </Dialog>
+    </>;
   }
 
-  public async fetchStations() {
+  private fetchStations = async () => {
     const response = await WebRequest.get(
       `${window.location.origin}/stations`);
 
@@ -87,6 +92,17 @@ class SettingsDialog extends React.Component<Props, State> {
     })
   };
 
+  private openDialog = () => {
+    this.setState({
+      open: true,
+    });
+  }
+
+  private onSave = async () => {
+    this.setState({
+      open: false,
+    });
+  }
 }
 
 export default SettingsDialog;
