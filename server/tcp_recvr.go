@@ -39,8 +39,11 @@ func (t *TcpRecvr) Receive() {
 
 		conn, err := net.Dial("tcp", t.ip+":2000")
 		if err != nil {
+			log.Printf("Failed to connect to station %s (%s) on port 2000", t.name, t.ip)
+			time.Sleep(time.Second * 10)
 			continue
 		}
+		log.Printf("Connected to station %s (%s) on port 2000", t.name, t.ip)
 		scanner := bufio.NewScanner(conn)
 
 		for scanner.Scan() {
