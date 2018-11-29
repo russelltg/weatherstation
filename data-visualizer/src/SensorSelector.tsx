@@ -1,91 +1,74 @@
 import * as React from 'react';
 
-import { Button, Checkbox, createStyles, Dialog, DialogTitle, List, ListItem, ListItemText, withStyles, WithStyles, DialogContent, DialogActions, Typography } from '@material-ui/core';
+import { Button, Checkbox, createStyles, withStyles, WithStyles } from '@material-ui/core';
+
+import { displayName } from './SensorTitles';
 
 import FilterIcon from '@material-ui/icons/FilterList';
-
 
 interface Props extends WithStyles<typeof styles> {
   sensors: string[],
   onChange: (enabled: Set<string>) => void,
-}
-
-interface State {
-  active: Set<string>;
-  dialogOpen: boolean,
+  active: Set<string>,
 }
 
 const styles = createStyles({
   button: {
-    margin: 5
+    margin: 3
+  },
+  inner: {
+    padding: "0px 8px",
+  },
+  checkbox: {
+    padding: 6,
+  },
+  flex: {
+    display: 'flex',
+    alignItems: 'center',
   }
 });
 
-class SensorSelector extends React.Component<Props, State> {
+class SensorSelector extends React.Component<Props> {
 
   public constructor(props: Props) {
     super(props);
-
-    this.state = {
-      active: new Set<string>(props.sensors),
-      dialogOpen: false,
-    };
   }
 
   public render() {
-    return <>
-      <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.openDialog}>
-        Filter Sensors
-                <FilterIcon />
-      </Button>
-      <Dialog open={this.state.dialogOpen}>
-        <DialogTitle>Filter Sensors...</DialogTitle>
-        <DialogContent>
-          <List>
-            {this.props.sensors.map(sensor => (
-              <ListItem key={sensor} button onClick={this.handleToggle(sensor)}>
-                <Checkbox checked={this.state.active.has(sensor)} disableRipple />
-                <ListItemText primary={sensor} />
-              </ListItem>
-            ))}
-          </List>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.closeDialog}>
-            <Typography color="secondary">Apply</Typography>
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>;
+    return <div className={this.props.classes.flex}>
+      <FilterIcon />
+      {this.props.sensors.map(sensor => (
+        <Button
+          key={sensor}
+          onClick={this.handleToggle(sensor)}
+          variant="outlined"
+          className={this.props.classes.button}
+          classes={{ root: this.props.classes.inner }}
+        >
+          <Checkbox
+            disableRipple
+            checked={this.props.active.has(sensor)}
+            classes={{ root: this.props.classes.checkbox }}
+          />
+          {displayName(sensor)}
+        </Button>
+      ))}
+    </div>;
   }
 
   private handleToggle = (sensor: string) => () => {
 
-    const newActive = new Set(this.state.active);
+    const newActive = new Set(this.props.active);
 
-    if (this.state.active.has(sensor)) {
+    if (newActive.has(sensor)) {
       newActive.delete(sensor);
     } else {
       newActive.add(sensor);
     }
 
-    this.setState({
-      active: newActive
-    });
+    this.props.onChange(newActive);
   };
 
-  private closeDialog = () => {
-    this.setState({
-      dialogOpen: false,
-    });
-    this.props.onChange(this.state.active);
-  };
-
-  private openDialog = () => {
-    this.setState({
-      dialogOpen: true,
-    });
-  }
 
 }
 

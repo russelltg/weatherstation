@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as WebRequest from "web-request";
 import SensorGraph from './SensorGraph';
 import SensorSelector from './SensorSelector';
-import { createStyles, WithStyles, withStyles } from '@material-ui/core';
+import { createStyles, WithStyles, withStyles, Divider } from '@material-ui/core';
 
 interface State {
   sensors: string[],
@@ -31,7 +31,8 @@ class SensorGrid extends React.Component<Props, State> {
 
   public render() {
     return <>
-      <SensorSelector sensors={this.state.sensors} onChange={this.onActiveChanged} />
+      <SensorSelector sensors={this.state.sensors} active={this.state.active_sensors} onChange={this.onActiveChanged} />
+      <Divider />
       <div className={this.props.classes.container}>
         {this.state.sensors.map(val => {
           if (this.state.active_sensors.has(val)) {
