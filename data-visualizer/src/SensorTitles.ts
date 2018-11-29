@@ -3,10 +3,14 @@ const sensorTitles = {
         displayName: "Temperature",
         units: "\u00b0 C",
     },
-    pressure: {
-        displayName: "Pressure",
-        units: "Bars", // TODO: is this the right pressure unit to use?
-    }
+    humidity: {
+        displayName: "Humidity",
+        units: "%"
+    },
+    wind: {
+        displayName: "Wind",
+        units: "m/s"
+    },
 };
 
 function displayName(sensor: string) {
