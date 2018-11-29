@@ -95,7 +95,7 @@ class SensorGraph extends React.Component<Props> {
 
         // fetch the last day of data
         const oldData = await WebRequest.json<SensorReading[]>(
-            `${window.location.origin}/data?start=${Math.round((new Date()).getTime() / 1000 - 3600 * 24)}&sensor=${encodeURIComponent(this.props.sensor)}`)
+            `${window.location.origin}/data?start=${Math.round((new Date()).getTime() / 1000 - 3600 * 24)}&sensor=${encodeURIComponent(this.props.sensor)}&datawidth=${20 * 60}`)
         if (oldData === undefined) {
             return;
         }

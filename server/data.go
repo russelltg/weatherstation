@@ -37,6 +37,7 @@ func (h *HandleData) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		endStr := r.URL.Query().Get("end")
 		stationStr := r.URL.Query().Get("station")
 		sensorStr := r.URL.Query().Get("sensor")
+		datawidth := r.URL.Query().Get("datawidth")
 
 		if startStr == "" {
 			// invalud request, must have start
@@ -67,11 +68,19 @@ func (h *HandleData) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		startTime := time.Unix(start, 0)
 		endTime := time.Unix(end, 0)
 
-		h.handleGet(startTime, endTime, stationStr, sensorStr, w)
+		h.handleGet(startTime, endTime, stationStr, sensorStr, datawidth, w)
+	case "DELETE":
+		// remove all rows from the database
+		query := `DELETE FROM weather`
+		_, err := h.db.Exec(query)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Failed to delete all rows: %s", err), http.StatusInternalServerError)
+			return
+		}
 	}
 }
 
-func (h *HandleData) handleGet(start time.Time, end time.Time, station string, sensor string, w http.ResponseWriter) {
+func (h *HandleData) handleGet(start time.Time, end time.Time, station string, sensor string, datawidth string, w http.ResponseWriter) {
 	query := `SELECT station, time, sensor, reading FROM weather WHERE ? <= time AND time < ?`
 	parameters := []interface{}{start.Unix(), end.Unix()}
 
@@ -83,6 +92,9 @@ func (h *HandleData) handleGet(start time.Time, end time.Time, station string, s
 	if sensor != "" {
 		query += " AND sensor = ?"
 		parameters = append(parameters, sensor)
+	}
+	if datawidth != "" {
+		query += " ORDER BY station, sensor"
 	}
 
 	rows, err := h.db.Query(query, parameters...)
@@ -102,9 +114,55 @@ func (h *HandleData) handleGet(start time.Time, end time.Time, station string, s
 		err = rows.Scan(&row.Station, &row.Time, &row.Sensor, &row.Reading)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Faield to scan row: %s", err), http.StatusInternalServerError)
+			return
 		}
 
 		ret = append(ret, row)
+	}
+
+	// process the data
+	if datawidth != "" && len(ret) != 0 {
+
+		// read it as a integer
+		datawidthInt, err := strconv.Atoi(datawidth)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("maxpts parameter must be a integer, %s", err), http.StatusBadRequest)
+			return
+		}
+
+		newRet := []WeatherRow{}
+
+		for i := 0; i < len(ret); {
+			startTime := ret[i].Time
+			thisStation := ret[i].Station
+			thisSensor := ret[i].Sensor
+
+			runningTime := startTime
+			runningReading := ret[i].Reading
+			count := int64(1)
+
+			i++
+
+			for i < len(ret) &&
+				ret[i].Sensor == thisSensor &&
+				ret[i].Station == thisStation &&
+				ret[i].Time < startTime+int64(datawidthInt) {
+
+				runningTime += ret[i].Time
+				runningReading += ret[i].Reading
+
+				count++
+				i++
+			}
+
+			newRet = append(newRet, WeatherRow{
+				thisStation,
+				runningTime / count,
+				thisSensor,
+				runningReading / float32(count),
+			})
+		}
+		ret = newRet
 	}
 
 	// serialize the JSON
@@ -117,6 +175,7 @@ func (h *HandleData) handleGet(start time.Time, end time.Time, station string, s
 	}
 
 	// get the string back, and write it to the reponse writer
+	w.Header().Add("Content-Type", "application/json")
 	w.Write(buffer.Bytes())
 }
 
