@@ -10,6 +10,7 @@ interface Props {
   nickname: string,
   ip: string,
   refreshEvent: () => void,
+  disableOkEvent: () => void,
 }
 
 interface State {
@@ -37,16 +38,16 @@ class StationSettingsRow extends React.Component<Props, State> {
         return <TableRow>
           <TableCell>{this.props.nickname}</TableCell>
           <TableCell>{this.props.ip}</TableCell>
-          <TableCell><IconButton onClick={this.onClick}><EditIcon /></IconButton></TableCell>
-          <TableCell><IconButton onClick={this.onDelete}><DeleteIcon /></IconButton></TableCell>
+          <TableCell padding="checkbox"><IconButton onClick={this.onClick}><EditIcon /></IconButton></TableCell>
+          <TableCell padding="checkbox"><IconButton onClick={this.onDelete}><DeleteIcon /></IconButton></TableCell>
         </TableRow>;
       default:
         const disabled = this.state.state === 'changing';
         return <TableRow>
           <TableCell><TextField disabled={disabled} value={this.state.name} onChange={this.onNameChange} /></TableCell>
           <TableCell><TextField disabled={disabled} value={this.state.ip} onChange={this.onIPChange} /></TableCell>
-          <TableCell><IconButton disabled={disabled} onClick={this.onClick}><CheckIcon /></IconButton></TableCell>
           <TableCell />
+          <TableCell padding="checkbox"><IconButton disabled={disabled} onClick={this.onClick}><CheckIcon /></IconButton></TableCell>
         </TableRow>;
     }
   }
@@ -54,6 +55,7 @@ class StationSettingsRow extends React.Component<Props, State> {
   private onClick = async () => {
     switch (this.state.state) {
       case 'default':
+        this.props.disableOkEvent();
         this.setState({ state: 'editing' });
         break;
       case 'editing':

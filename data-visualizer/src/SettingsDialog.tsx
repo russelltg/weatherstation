@@ -1,16 +1,18 @@
 import * as React from 'react';
 import * as WebRequest from "web-request";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Table, TableHead, Typography, TableRow, TableCell, IconButton, TableBody } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Table, TableHead, Typography, TableRow, TableCell, IconButton, TableBody, Divider } from '@material-ui/core';
 
 import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/Settings';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import StationSettingsRow from './StationSettingsRow';
 
 interface State {
   stations: Station[]
   open: boolean,
+  rowsBeingEdited: number,
 }
 
 interface Station {
@@ -25,6 +27,7 @@ class SettingsDialog extends React.Component<{}, State> {
     this.state = {
       stations: [],
       open: false,
+      rowsBeingEdited: 0,
     };
 
     this.fetchStations();
@@ -47,26 +50,38 @@ class SettingsDialog extends React.Component<{}, State> {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.stations.map(s => (<StationSettingsRow key={s.name} nickname={s.name} ip={s.ip} refreshEvent={this.fetchStations} />))}
-              <TableRow>
+              {this.state.stations.map(s => (
+                <StationSettingsRow
+                  key={s.name}
+                  nickname={s.name}
+                  ip={s.ip}
+                  refreshEvent={this.fetchStations}
+                  disableOkEvent={this.disableOK}
+                />))}
+              < TableRow >
                 <TableCell />
                 <TableCell />
                 <TableCell />
-                <TableCell>
+                <TableCell padding="checkbox">
                   <IconButton onClick={this.addStation}><AddIcon /></IconButton>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
+          <Divider />
+          <Button onClick={this.clearDB}><DeleteIcon />Clear Database</Button>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.onSave}><CheckIcon />Ok</Button>
+          <Button disabled={this.state.rowsBeingEdited !== 0} onClick={this.onSave}><CheckIcon />Ok</Button>
         </DialogActions>
       </Dialog>
     </>;
   }
 
   private fetchStations = async () => {
+    this.setState({
+      rowsBeingEdited: this.state.rowsBeingEdited - 1,
+    });
     const response = await WebRequest.get(
       `${window.location.origin}/stations`);
 
@@ -98,9 +113,19 @@ class SettingsDialog extends React.Component<{}, State> {
     });
   }
 
-  private onSave = async () => {
+  private onSave = () => {
     this.setState({
       open: false,
+    });
+  }
+
+  private clearDB = () => {
+    WebRequest.delete(`${window.location.origin}/data`);
+  }
+
+  private disableOK = () => {
+    this.setState({
+      rowsBeingEdited: this.state.rowsBeingEdited + 1,
     });
   }
 }
