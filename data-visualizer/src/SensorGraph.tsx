@@ -35,6 +35,9 @@ class SensorGraph extends React.Component<Props> {
     public constructor(props: Props) {
         super(props);
 
+        const listener = window.matchMedia("(max-width: 600px)")
+        listener.addListener(() => this.forceUpdate());
+
         this.startLoadingResources();
     }
 
@@ -84,7 +87,7 @@ class SensorGraph extends React.Component<Props> {
 
     public render() {
         return <div>
-            <canvas width="600px" height="400px" ref={e => { if (e != null) { this.chartElement = e; } }} />
+            <canvas width={Math.min(window.outerWidth - 20, 600)} height="400" className={this.props.classes.chart} ref={e => { if (e != null) { this.chartElement = e; } }} />
         </div >;
     }
 
