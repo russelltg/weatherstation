@@ -87,7 +87,7 @@ class SensorGraph extends React.Component<Props> {
 
     public render() {
         return <div>
-            <canvas width={Math.min(window.outerWidth - 20, 600)} height="400" className={this.props.classes.chart} ref={e => { if (e != null) { this.chartElement = e; } }} />
+            <canvas width={Math.min(window.outerWidth - 20, 600)} height="400" ref={e => { if (e != null) { this.chartElement = e; } }} />
         </div >;
     }
 
