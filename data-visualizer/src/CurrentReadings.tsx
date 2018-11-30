@@ -49,7 +49,7 @@ class CurrentReadings extends React.Component<Props, State> {
         <CardContent>
           <Typography variant="h2">{station}</Typography>
           {Object.keys(this.state[station]).map(sensor => (
-            <div>{displayName(sensor)}: {this.state[station][sensor]} {units(sensor)}</div>
+            <div key={sensor}>{displayName(sensor)}: {this.state[station][sensor]} {units(sensor)}</div>
           ))}
         </CardContent>
       </Card>))}
