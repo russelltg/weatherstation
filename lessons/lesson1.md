@@ -1,6 +1,7 @@
 # Lesson 1: Setting up the Arduino IDE and tour of the Arduino [~10 minutes]
 
-In order to install arduino code onto an arduino, you need the Arduino IDE.
+In order to install arduino code onto an arduino, you need the Arduino IDE (Integrated Development Environment), 
+which allows you to program arduino applications and install them onto arduios. 
 Installer packages can be found on the [arduino site](https://www.arduino.cc/en/Main/Software#download). 
 
 Next, plug in the arudino to the computer that the Arduino IDE was installed on. Lights should come up on the aruduino, indicating that it has power.
