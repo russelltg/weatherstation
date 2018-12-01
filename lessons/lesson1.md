@@ -27,7 +27,7 @@ Next, start the IDE, it should look like this:
 Next, you need to tell the IDE to look for your device. In order to do that,
 Click the `Tools` dropdown menu, and go to `Port`. Select your arduino board.
 
-TODO image here
+![](Tools-BoardSelect.PNG)
 
 ## Tour of Arduino Coding - Hello World
 
