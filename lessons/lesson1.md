@@ -20,7 +20,7 @@ Next, start the IDE, it should look like this:
 | ![](OpenSave.png)  | Open/Save           | Open or save a sketch, respectively                                   |
 | ![](SerialMon.png) | Open Serial Monitor | Open the serial monitor                                               |
 | ![](Tabs.png)      | File tabs           | If you have multiple files open in one window, they will show as tabs |
-| ![](CodeArea.png)  | Code Area           | The code area, where code will be printed                             |
+| ![](CodeArea.png)  | Code Area           | The code area, where you will write your code                         |
 
 ## Selecting your device
 
@@ -40,13 +40,33 @@ put comments around relative complex pieces of code so someone can read your cod
 
 If you press the upload button (the right arrow), it will upload the code
 to the arduino (provided that the correct device is selected under `Tools->Port`). Nothing will happen, as there
-is no code in the `setup` or `loop` functions. 
+is no code in the `setup` or `loop` functions, but do so anyway to
+make sure that there are no errors.
 
-In order to get the arduino to do someting, we need to add code. In the `setup` function, add the following lines of code:
+When you press upload, it will prompt you to choose a directory to
+save your sketch in. Choose wherever you desire, the default location
+works fine.
+
+In order to get the arduino to do someting, we need to add code. In the `setup` function, add the following lines of code between the `{` and `}`
+after `setup`:
 
 ```C++
 Serial.begin(9600); // Set the baud rate for the serial connection
 Serial.println("Hello World!"); // Send the message 'Hello World!' over serial.
+```
+
+so that the whole file looks like:
+
+```C++
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Serial.println("Hello World!");
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+}
 ```
 
 The computer and the arduino are connected over a serial connection so they can share data. If you are curious
@@ -63,6 +83,7 @@ TODO INSERT IMAGE
 ## Tour of the Arduino
 
 ![](Arduino.jpg)
+> Image source: https://store.arduino.cc/usa/arduino-uno-rev3
 
 On the top of the arduino, there are digital input and output pins, labeled from 0 to 13, 
 making for 14 digital pins total. Digital means that the pins will represent either a 1
