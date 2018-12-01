@@ -17,14 +17,6 @@ DHT sensor(DHT_PIN, DHT_TYPE);
 
 SoftwareSerial esp8266(RX_PIN, TX_PIN);
 
-// Run an AT command
-// command - the AT command, including AT+
-// timeout_ms - the timeout of the command, in milliseconds.
-//              use -1 for an infinite timeout
-// output - a pointer to a string to store the full string output,
-//          including the echo part. can be left null.
-// 
-// return - if it succeeds
 bool at_command(String command, int timeout_ms, String* output) {
   esp8266.println(command);
 
@@ -70,7 +62,7 @@ void upload_data(String sensor, float reading) {
     String line = esp8266.readStringUntil('\n');
     Serial.println(line);
     if (line == "ERROR\r") {
-      Serial.println("Faield to send data to pi");
+      Serial.println("Failed to send data to pi");
       break;
     } 
     if (line == "SEND OK\r") {
@@ -84,7 +76,8 @@ float windRead(){
   int analogValue = analogRead(WIND_SENSOR_PIN);
   float voltage = analogValue * voltageConversionConstant;
   float windSpeed = (voltage - 0.4) * 32.4/(2 - 0.4);
-  if(windSpeed < 0 ){
+  float windSpeedKm = windSpeed * 3.6;
+  if(windSpeed < 3 ){
     return 0;
   }else{
     return windSpeed;
@@ -97,7 +90,6 @@ void setup()
   while (!Serial) {
     delay(10);
   }
-  Serial.println("1");
 
   sensor.begin();
   Serial.println("Sensor init success!");
@@ -108,10 +100,6 @@ void setup()
     delay(10);
   }
 
-
-  Serial.println("2");
-
-  
   String out;
   bool ret;
 
@@ -129,12 +117,6 @@ void setup()
     Serial.println("Failed to show wifi networks!");
     return;
   }
-
-
-  Serial.println("3");
-
-
-
 
   // CWJAP connects to a wifi network. Enter the SSID (name) and password
   // for the wifi network here.
@@ -183,13 +165,8 @@ void setup()
   if (!ret) {
     Serial.println("Failed to setup the arduino as a TCP server on port 2000");
   }
-
-  // wifi is now setup and good to 
-
-  
+  // wifi is now setup and good to   
 }
-
-
 
 void loop()
 { 
@@ -201,8 +178,21 @@ void loop()
     upload_data("humidity", hum);
     delay(10);
     upload_data("wind", wind);
-    Serial.println(temp);
-    Serial.println(hum);
-    Serial.println(wind);
+    Serial.print("Temperature: ");
+    Serial.print(temp);
+    Serial.println(" *C");
+    Serial.print("Humidity: ");
+    Serial.print(hum);
+    Serial.println(" %");
+    Serial.print("Wind Speed: ");
+    Serial.print(wind);
+    Serial.println(" km/hr");
+    if(wind == 0) {
+      Serial.println("");
+      Serial.println("WARNING: Wind speed to low for accurate reading!");
+      Serial.println("Wind Speed < 3 km/hr");
+    }else{
+      Serial.println("Wind reading nominal");
+    }
     delay(5000);
 }
