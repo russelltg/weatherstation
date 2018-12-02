@@ -1,68 +1,31 @@
-In order to write code for the arduino, we must first setup the circuit. The following is a circuit diagram for the setup.
+# Lesson 4: Weather station functions [~30 minutes]
 
-![arduino_simple.png](../arduino/Schematics/arduino_simple.png)
+In our code, we can do a lot more than printing an output. Generally, when we want our code to do something, we find a library that can do what we want, we add the header file using a `#`, and we use the functions we want inside the code to achieve the final result.
 
-Each green line shows where a cable is to go on the actual circuit. In this scenario, the use on a breadboard looks slightly different. We need to connect two sensors (`DHT22` and `LCD I2C`) to 5V power, but the arduino only has one pin for this. Therefore, the arduino 5V power should be sent to the '+' rail of the breadboard, and each 5V power pin on the sensors should be connected to that '+' rail.
+This tutorial will walk you through this process allowing you to use any functions you can think of. This means you will, in theory, be able to do whatever you want with the code.
 
-//1
-These are pre-processor statements. They allow us to add
-lots of lines of code to the beginning of our own code rather
-than adding it all in on our own. This code is contained in
-"header" files. Basically, header files contain code that is
-often called by more than one sketch. Therefore, it is easier
-to add one line to the code than rewriting all of the header
-file into our sketch
+Let's get started!
 
-//2
-These are #define statements. They will allow the user to
-create some name with a value. For instance, when "DHT_PIN"
-is put into a line of code, the value 7 will be put in its
-place. This stops the user from having to put the number 7
-in every time this value is needed. Also, it does not require
-a variable declaration, which makes it easier.
+### Step one:
 
-//3
-These lines will initialize certain things by calling code
-in the header files. Essentially, we are telling the code
-"we have a DHT22 based sensor on pin 7". Using this information,
-the software can now talk to the sensor. These lines make
-our individual parts available for use.
+First, we need to find a library to use that includes the functions we want. You already did this process in lesson 2, but we will review it here. Going to `Tools`->`Manage Libraries...` will allow you to find libraries. From there, you can then search any library you want and install it. You already have the `DHT Sensor Library` that we will need to operate our temperature and humidity sensor for the weather station, but we need to be able to output the results somehow. For this, we will use an LCD panel. The LCD panel needs to be told what to display and how to do it, so we need a library!
 
- //4
-This is a variable declaration. This will allow us to call
-this number in the code without us having to type this number
-more than once.
+But now we have an issue... The library we need cannot be found under `Tools`->`Manage Libraries...`. So how do we install it?
 
-//5
-These are functions. They allow us to tell the computer what to
-do. They follow this basic structure. They can be called from
-inside the program, meaning we can write a function once and
-use it multiple times. This strategy is often used to make
-the "main" function (the code that the computer starts running)
-very simple. In this case, the code that makes the sensors read
-the values will be placed here to make the code inside "loop"
-very simple. The first word is what the function returns. In other
-words, the function will run and will spit something out. In the
-case of these functions, a "float" will come from the function.
-A "float" is a number with a decimal point (like 1.12345). The
-second part is the name. This is what you would like the function
-to be referred to. The "()" will not be used here, and is slightly
-more advanced, so it will be left out for now. Finally, a "{ }"
-is used. This is where the code the function will run will go.
+First, go to the website that has the download for the library at https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c. The website will look like this:
 
-//6
-windRead() is a complicated function. Don't worry too much
-about how this works quite yet.
+![Library Website](images/LibrarySite.png)
 
-//7
-The setup() function is where the user can setup everything for
-the code. This function runs only one time. Keep in mind, none
-of the above functions ran before this point! Use setup() and
-later, loop() to call the functions above to make the code run!
+Click on the button that says `LiquidCrystal_I2C-1.1.2.zip`. This will download the library to your computer. We then need to add this to the arduino software. To do this, we will go to `Sketch`->`Include Library`->`Add .ZIP Library...`
 
-//8
-The loop() function is where the user can define a set of code
-that will be run continuously. This code will loop, as the name
-suggests, so this is where the sensors will actually read data
-and where the LCD will be set to display the results. Keep in
-mind, both loop() and setup() need to be 'void'!
+![Add Library](images/AddLibrary.png)
+
+Then, go to your downloads folder. Double clicking on a folder will allow you to open it. When you finally can see `LiquidCrystal_I2C-1.1.2.zip`, click on it once. Then click open.
+
+![Add .ZIP](images/AddLibraryZIP.png)
+
+Congratulations! You have just added a library from the internet. This process can be repeated to gather any library you need. The possibilities are endless!
+
+### Step two:
+
+Now that we have a library, we need to learn how to use it. This is the portion where you will have to take some time to learn on your own. This part is the main skill of coding. Being able to look at example code and turning it into what you want to do is the most important thing. To begin, click `Files`->`Examples`->`01.Basics`->`Blink`
