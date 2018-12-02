@@ -8,26 +8,26 @@ Next, plug in the arudino to the computer that the Arduino IDE was installed on.
 
 Next, start the IDE, it should look like this: 
 
-![Basic IDE](IDE.png)
+![Basic IDE](images/IDE.png)
 
 ## Tour of the Arduino IDE
 
 | Section of the IDE | Name                | Description                                                           |
 | ------------------ | ------------------- | --------------------------------------------------------------------- |
-| ![](Verify.png)    | Verify              | Verifies your code, notifying of any syntax errors                    |
-| ![](Upload.png)    | Upload              | Upload code to the arduino, and run the code                          |
-| ![](New.png)       | New Sketch          | Opens a new empty sketch in a new window                              |
-| ![](OpenSave.png)  | Open/Save           | Open or save a sketch, respectively                                   |
-| ![](SerialMon.png) | Open Serial Monitor | Open the serial monitor                                               |
-| ![](Tabs.png)      | File tabs           | If you have multiple files open in one window, they will show as tabs |
-| ![](CodeArea.png)  | Code Area           | The code area, where you will write your code                         |
+| ![](images/Verify.png)    | Verify              | Verifies your code, notifying of any syntax errors                    |
+| ![](images/Upload.png)    | Upload              | Upload code to the arduino, and run the code                          |
+| ![](images/New.png)       | New Sketch          | Opens a new empty sketch in a new window                              |
+| ![](images/OpenSave.png)  | Open/Save           | Open or save a sketch, respectively                                   |
+| ![](images/SerialMon.png) | Open Serial Monitor | Open the serial monitor                                               |
+| ![](images/Tabs.png)      | File tabs           | If you have multiple files open in one window, they will show as tabs |
+| ![](images/CodeArea.png)  | Code Area           | The code area, where you will write your code                         |
 
 ## Selecting your device
 
 Next, you need to tell the IDE to look for your device. In order to do that,
 Click the `Tools` dropdown menu, and go to `Port`. Select your arduino board.
 
-![](Tools-BoardSelect.PNG)
+![](images/Tools-BoardSelect.PNG)
 
 ## Tour of Arduino Coding - Hello World
 
@@ -82,7 +82,7 @@ TODO INSERT IMAGE
 
 ## Tour of the Arduino
 
-![](Arduino.jpg)
+![](images/Arduino.jpg)
 > Image source: https://store.arduino.cc/usa/arduino-uno-rev3
 
 On the top of the arduino, there are digital input and output pins, labeled from 0 to 13, 

@@ -27,7 +27,7 @@ class App extends React.Component<WithStyles<typeof styles>, {}> {
       <div>
         <AppBar position="static" color="default">
           <Toolbar>
-            <Typography className={this.props.classes.grow} variant="h6" color="inherit">Weather Station</Typography>
+            <Typography className={this.props.classes.grow} variant="h6" color="inherit">HyperStation</Typography>
             <SettingsDialog />
           </Toolbar>
         </AppBar>

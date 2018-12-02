@@ -10,7 +10,7 @@ two columns of connected rows.
 
 This gif shows how each pin in the breadboard is connected to each other:
 
-![](BreadBoard.gif)
+![](images/BreadBoard.gif)
 > Image Source: https://learn.adafruit.com/assets/35419
 
 ## Tour of the DHT-22 Unit
@@ -19,7 +19,7 @@ This gif shows how each pin in the breadboard is connected to each other:
 The DHT-22 sensor doubles as both a thermometer and a humidity sensor.
 It is a simple unit with 3 or 4 pins:
 
-![](DHT22.jpg)
+![](images/DHT22.jpg)
 > Image Source: https://leeselectronic.com/en/product/7375.html
 
 If your DHT-22 pin only has 3 pins, then it doesn't have what is labled as
@@ -30,14 +30,14 @@ pin 3 in the above photo, which does nothing anyways.
 Insert it into your breadboard horizontally, so that each pin is *not*
 connected to each other:
 
-![](DHT22BB.jpg)
+![](images/DHT22BB.jpg)
 
 Wire the GND pin, which is at the far right side and also marked
 with a `-`, to a GND pin on the arduino, the `+` pin to +5V on the arduino,
 and wire the data pin (the middle pin) to one of the digital input pins
 on the arduino:
 
-![](DHT22-wired.jpg)
+![](images/DHT22-wired.jpg)
 
 ## Coding it
 
@@ -53,15 +53,15 @@ In order to interface with the sensor, we need to use a library
 
 In the arduino IDE, go to `Tools`->`Manage Libraries...`:
 
-![](ManageLibs.png)
+![](images/ManageLibs.png)
 
 Search for 'Adafruit Unified Sensor' in the search bar and install the library:
 
-![](AdafruitUnified.png)
+![](images/AdafruitUnified.png)
 
 And also install 'DHT sensor library' by adafruit:
 
-![](DHTLib.png)
+![](images/DHTLib.png)
 
 Now, to make sure that it installed correctly, insert `#include <DHT.h>`
 at the very top of your arduino code (even before `void setup`) and 
