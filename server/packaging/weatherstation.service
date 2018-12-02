@@ -1,0 +1,6 @@
+[Service]
+Restart=always
+ExceStart=/opt/weatherstation/server
+WorkingDirectory=/opt/weatherstation
+User=pi
+
