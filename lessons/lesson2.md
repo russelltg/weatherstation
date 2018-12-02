@@ -64,11 +64,15 @@ And also install 'DHT sensor library' by adafruit:
 ![](DHTLib.png)
 
 Now, to make sure that it installed correctly, insert `#include <DHT.h>`
-at the top of your arduino code and click the check button, ensuring no errors.
+at the very top of your arduino code (even before `void setup`) and 
+click the check button, ensuring no errors.
 
 ### Writing the code
 
-After the `#include` statement, create a DHT sensor:
+What this does is it tells arduino that we want to use the DHT.h library.
+If we did not have this, we would not be able to use it.
+
+After the `#include` statement (still before `void setup`), create a DHT sensor:
 
 ```C++
 DHT dhtSensor(7, DHT22);
@@ -79,13 +83,14 @@ the parameters `(7, DHT22)`. 7 indicates the pin which the sensor is plugged int
 DHT22 indicates the chip type. This library is capable of working with both DHT11
 and DHT22 sensors, so we must indicate that it's a DHT22 chip.
 
-Next, in the `setup` function (between the `{` and `}`), add the following line of code:
+Next, in the `setup` function (between the `{` and `}`), add the following lines of code:
 
 ```C++
+Serial.begin();
 dhtSensor.begin();
 ```
 
-This initializes the library. 
+This initializes the library and the Serial connection to the computer.
 
 Now, in the loop function, insert the following between the `{` and `}`:
 
