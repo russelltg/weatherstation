@@ -14,15 +14,15 @@ But now we have an issue... The library we need cannot be found under `Tools`->`
 
 First, go to the website that has the download for the library at https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c. The website will look like this:
 
-![Library Website](images/LibrarySite.png)
+![Library Website](images/LibrarySite.PNG)
 
 Click on the button that says `LiquidCrystal_I2C-1.1.2.zip`. This will download the library to your computer. We then need to add this to the arduino software. To do this, we will go to `Sketch`->`Include Library`->`Add .ZIP Library...`
 
-![Add Library](images/AddLibrary.png)
+![Add Library](images/AddLibrary.PNG)
 
 Then, go to your downloads folder. Double clicking on a folder will allow you to open it. When you finally can see `LiquidCrystal_I2C-1.1.2.zip`, click on it once. Then click open.
 
-![Add .ZIP](images/AddLibraryZIP.png)
+![Add .ZIP](images/AddLibraryZIP.PNG)
 
 Congratulations! You have just added a library from the internet. This process can be repeated to gather any library you need. The possibilities are endless!
 
@@ -30,7 +30,7 @@ Congratulations! You have just added a library from the internet. This process c
 
 Now that we have a library, we need to learn how to use it. This is the portion where you will have to take some time to learn on your own. This part is the main skill of coding. Being able to look at example code and turning it into what you want to do is the most important thing. To begin, click `Files`->`Examples`->`01.Basics`->`Blink`
 
-![Blink Example](images/BlinkExample.png)
+![Blink Example](images/BlinkExample.PNG)
 
 Try to figure out what this code does. Upload it to the arduino, look at what the arduino does, and decide what each line of code is doing under the hood.
 
@@ -42,7 +42,7 @@ This code is making the built in LED on the arduino blink. If you figured this o
 
 Now, use `Files`->`Examples`->`LiquidCrystal I2C`->`HelloWorld` to open the code shown below.
 
-![Hello World Example](images/HelloWorldExample.png)
+![Hello World Example](images/HelloWorldExample.PNG)
 
 Notice that the code has
 ```C++
