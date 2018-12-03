@@ -176,7 +176,7 @@ The room is dirty!
 
 Keep in mind, everything but the first line must repeat. Use `Serial.begin(9600);`, `Serial.print()`, and `Serial.println()` to create these outputs. Don't forget `void setup()` and `void loop()` and when they run. Also, don't forget to include `;` at the end of the correct statments. Example code is below that demonstrates this, but try to do it on your own first! One last note: try to have the code wait 6 seconds after printing each line!
 
-After writing the code, hit ![Upload](images/Upload.png) to upload the code to the arduino. Then, hit ![Serial Monitor](images/SerialMon.png) to see what the code outputs.
+After writing the code, hit ![Upload](images/Upload.png) to upload the code to the arduino. Then, hit ![Serial Monitor](images/SerialMon.png) to see what the code outputs ***(This is called the serial monitor)***.
 
 ---
 
@@ -211,6 +211,8 @@ void main() {
 If your code doesn't look exactly like this but outputs what it should, that's perfectly fine. There is never just one way to make code do something, so having a solution that is different from the example above is perfectly acceptable. If your code doesn't output what you thought it would, continue editing and trying again. Looking back through code to find errors is what coding is all about.
 
 At this point, you have the basics of coding down. Next, we will move on to some special things the code can do in order to set up our weather station.
+
+But, before you move on, please complete assignment 1. It can be found [here](assignment1.md).
 
 ---
 

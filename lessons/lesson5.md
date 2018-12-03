@@ -295,6 +295,8 @@ If you got that, congratulations! You're well on your way to being able to learn
 
 Now, as a reward, we are going to setup a super complicated weather station. We aren't going to fully explain this as it would take years and years to master programming well enough to create the station from scratch. So, we are just going to give you the instructions to set it up. Hopefully, you will find this project cool enough to continue learning to the point that you can create this on your own one day!
 
+But, before you move on, please complete assignments 2 and 3. They can be found here: [assignment 2](assignment2.md), [assigment 3](assignment3.md).
+
 ---
 
 If you have any issues with the arduino, visit the [issues page.](issues.md)

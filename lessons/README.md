@@ -21,6 +21,14 @@ The lessons are split into three parts. Lesson one is a basic tutorial and intro
 * [Lesson 7: Setting up the raspberry pi server](lesson7.md)
 * [Lesson 8: How to connect to a weather Station](lesson8.md)
 
+There are also some assignments available to the students as the progress. They can be found here:
+
+#### Assignments
+
+* [Assignment 1: To be done after lesson 3](assignment1.md)
+* [Assignment 2: To be done after lesson 5](assignment2.md)
+* [Assignment 3: To be done after lesson 5 and assignment 2](assignment3.md)
+
 ---
 
 If you have any issues with the arduino, visit the [issues page.](issues.md)
