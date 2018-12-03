@@ -1,4 +1,4 @@
-# Lesson 5: Simple weather station creation
+# Lesson 5: Simple weather station creation [~60 minutes]
 
 This lesson will walk you through the setup of a simple weather station. You will then get to write your own code for the station and debug existing code to make it work.
 
