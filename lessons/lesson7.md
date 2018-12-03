@@ -1,4 +1,4 @@
-# Lesson 6: Setting up the raspberry pi server [~30 minutes]
+# Lesson 7: Setting up the raspberry pi server [~30 minutes]
 
 In this lesson, you will learn how to setup a simple Raspberry Pi server.
 
