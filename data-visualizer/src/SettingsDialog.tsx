@@ -29,7 +29,9 @@ class SettingsDialog extends React.Component<{}, State> {
       open: false,
       rowsBeingEdited: 0,
     };
+  }
 
+  public componentDidMount() {
     this.fetchStations();
   }
 
@@ -80,7 +82,7 @@ class SettingsDialog extends React.Component<{}, State> {
 
   private fetchStations = async () => {
     this.setState({
-      rowsBeingEdited: this.state.rowsBeingEdited - 1,
+      rowsBeingEdited: Math.max(0, this.state.rowsBeingEdited - 1),
     });
     const response = await WebRequest.get(
       `${window.location.origin}/stations`);

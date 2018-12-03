@@ -3,12 +3,10 @@ package main
 import (
 	"database/sql"
 	"log"
-	"net"
 	"net/http"
 	"os"
 
 	"github.com/gobuffalo/packr"
-	"github.com/gorilla/websocket"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -62,10 +60,7 @@ func main() {
 	db := setupDatabase()
 	defer db.Close()
 
-	wshandler := &HandleWs{
-		websocket.Upgrader{},
-		map[net.Addr]WsConn{},
-	}
+	wshandler := NewHandleWs()
 
 	box := packr.NewBox("../data-visualizer/build")
 
@@ -80,5 +75,5 @@ func main() {
 	http.Handle("/", http.FileServer(box))
 
 	log.Printf("Starting server on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
 }

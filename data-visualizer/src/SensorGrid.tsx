@@ -31,6 +31,7 @@ class SensorGrid extends React.Component<Props, State> {
 
   public render() {
     return <>
+      <Divider />
       <SensorSelector sensors={this.state.sensors} active={this.state.active_sensors} onChange={this.onActiveChanged} />
       <Divider />
       <div className={this.props.classes.container}>

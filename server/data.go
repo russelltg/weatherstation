@@ -94,7 +94,9 @@ func (h *HandleData) handleGet(start time.Time, end time.Time, station string, s
 		parameters = append(parameters, sensor)
 	}
 	if datawidth != "" {
-		query += " ORDER BY station, sensor"
+		query += " ORDER BY station, sensor, time"
+	} else {
+		query += " ORDER BY time"
 	}
 
 	rows, err := h.db.Query(query, parameters...)

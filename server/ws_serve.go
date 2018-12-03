@@ -19,6 +19,17 @@ type HandleWs struct {
 	connections map[net.Addr]WsConn
 }
 
+func NewHandleWs() *HandleWs {
+	return &HandleWs{
+		websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool {
+				return true
+			},
+		},
+		map[net.Addr]WsConn{},
+	}
+}
+
 func (h *HandleWs) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// filters
@@ -29,7 +40,9 @@ func (h *HandleWs) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := h.upgrader.Upgrade(w, r, nil)
 	if err != nil {
+		log.Printf("Faield to upgrade websockt: %s", err)
 		http.Error(w, fmt.Sprintf("Failed to upgrade websocket: %s", err), http.StatusInternalServerError)
+		return
 	}
 	addr := conn.RemoteAddr()
 	h.connections[addr] = WsConn{
