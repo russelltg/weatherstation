@@ -1,127 +1,84 @@
-# Lesson 6: Setting up the raspberry pi server (~30 mins)
+# Lesson 6: Setting up the complex weather station [~60 minutes]
 
-In this lesson, you will learn how to setup a simple Raspberry Pi server.
+In order to have the full weather station, we must first setup the arduino.
 
-Servers are quite complex in nature, so most of the heavy lifting has been done
-for you, you will just need to set it.
+Let's get started!
 
-## Step 1: Flashing the ISO
-The Raspberry Pi comes with a built-in micro SD slot, so we need to install the server on it.
-A image file (.iso) has been prepared with all the required software to run the server,
-all you have to do is install it.
+### Step one: Wiring the circuit
 
-Download the ISO file from [here](INSERT LINK), and [install the etcher tool](https://www.balena.io/etcher/) that
-can be used to flash images.
+To begin, wire the DHT22 sensor to the arduino using the same method in lesson 5. The schematic is included below:
 
-Insert the microsd card into your computer (you will need some sort of micro sd card reader), and open etcher.
+![Arduino Complex Schematic](../arduino/Schematics/arduino_complex.png)
 
-## Step 2: Configuring wireless
+ That is, connect the power pin to the `+` on the breadboard and the data pin (middle pin) to pin 7 on the arduino. There is one difference with this. Have `GND` go to the `-` on the breadboard. Then connect one of the `GND` pins on the arduino to the `-` column on the breadboard.
 
-Plug the raspberry pi into a keyboard and
-monitor via USB and HDMI respectively.
+ > NOTE: The `+` column needs to have 5 volts of power for the temperature sensor. We will have the other `+` column have 3.3 volts. Be very careful about what you plug into the 5 volt `+` column as plugging the wifi module into it will destroy it!!
 
-You should be left at a prompt for a username and
-password. The default is `pi` for username and
-`raspberry` for password.
+ Now that the DHT22 sensor is wired up, we must wire up the wind sensor. The wind sensor has a plug with three cables in it. One is brown, one is black, and the one in between the brown and black is blue. Plug the brown cable into the 5 volt column (the `+` column, but we will refer to it as `5 volt column` as there will be two `+` columns in this project) on the breadboard. Plug the black cable into the `-` column. Finally, plug the blue cable into pin `A0` on the arduino.
 
-### Tour of Bash (the linux terminal)
+ The final thing we must wire is the wifi module. To begin, run a cable from the 3.3 volt pin on the arduino to the `+` column that is not being used.
 
-The linux terminal (aka bash, which stands for bourne again shell), is a extremely powerful tool
-that can be used to do almost anything, and is the 
-tool of choice for many programmers.
+ > NOTE: Do not plug the 3.3 volt pin into the 5 volt column on accident. If the board is turned on, bad things will happen. Make sure to separate the 5 volt and 3.3 volt into two separate `+` columns, and remember which is which.
 
-It works by taking in commands, which are in the format:
+ On the wifi module, there is a key with the name of each pin on it. For instance, `3V3` is shown in the top left of the module. ![Pins](images/ESPPins.jpg) The `3V3` pin is, therefore, the top left pin.
+
+ Plug the `3V3` and `EN` pins into the 3.3 volt `+` column on the breadboard.
+
+ > CAUTION: THIS IS WHERE YOU MUST NOT PLUG THE CABLES INTO THE 5 VOLT COLUMN. THAT WOULD DESTROY THE MODULE!
+
+ Plug the `GND` pin into the `-` rail on the breadboard. Finally, plug the `RX` pin into pin 0 and the `TX` pin into pin 1.
+
+ Now that that is setup, it is time to start setting up the code.
+
+ ### Step two: Setting up the code
+
+ ##### ESP8266 Wifi module setup:
+
+ To begin, there is one command that we must do before we can run the code. Open up the arduino IDE and open the serial monitor. Down at the bottom right, it will say `9600 baud`. Click on this and change the value to `115200`. Now that that is done, unplug the arduino and replug it in.
+
+ Next, click on the button that says `Newline` and change it to `Both NL & CL`. Close the serial monitor and open it up again. Now we are ready to start. In the bar at the top, there is a button that says send on the right side with a text entry field to the left. Select this text field (this should be selected by default) and enter `AT`. If the serial says
+```C++
+AT
+
+
+OK
+```
+everything is working. If it doesn't, unplug the pins connected to pins 0 and 1 on the arduino. Then, switch the position they were originally connected to. Try closing the serial monitor and opening it again. Type `AT` and wait for
+```C++
+AT
+
+
+OK
+```
+If nothing happens, make sure the bottom right says `115200 baud` and `Both NL & CL`. Also, try switching pins 0 and 1 again.
+
+If it is working, type in `AT+CIOBAUD=9600` and hit enter. After a couple of seconds, you are done!
+
+At the bottom right, change `115200 baud` to `9600 baud` and restart both the serial monitor and the arduino IDE.
+
+##### Arduino code setup:
+
+First, we need to edit the pin placement of the wifi module. Disconnect pins 0 and 1. These should be connected to `TX` and `RX` on the wifi module. Connect the wire from `TX` to pin 2 on the arduino. Then, connect the wire from `RX` to pin 3 on the arduino. This is the final circuit we will use for the weather station!
+
+Next, go to https://github.com/russelltg/weatherstation/blob/master/arduino/arduino_complex/arduino_complex.ino/ and copy the code. Paste it into the arduino software. Before uploading, we need to enter in the information about your wifi network.
+
+Hit `ctrl + f` in the arduino menu. This is a search menu. It will find whatever you type into the seach menu in the code. Enter in `AT+CWJAP` in the search menu. This will take you to a line that looks like this:
+```C++
+ret = at_command("AT+CWJAP=\"MOORE FAMILY\",\"brightraccoon030\"", -1, &out);
+```
+Where the code says `MOORE FAMILY`, put the name of your wifi network. Where the code says `brightraccoon030`, put the password for your wifi network. Be sure not to remove the `""` or the `\` from the code. Save this file with the changes and upload to the board.
+
+Open the serial monitor. Make sure that the bottom right says `9600 baud` and `Both NL & CL`. Then, take a look at what is popping up in the monitor. To make this easier, deselect autoscroll by clicking the button that says `Autoscroll` in the bottom right. Let the code run for a little while, then look for a line that says:
 
 ```
-<COMMAND> <PARAMETERS...>
+AT+CIFSR
+
++CIFSR:STAIP,"192.168.1.123"
++CIFSR:STAMAC,"ec:fa:bc:20:eb:24"
 ```
 
-for example:
+Write down the number in the spot that `192.168.1.123` is. This is the IP address for the weather station. This is required to connect the arduino to the raspberry pi in later lessons.
 
-```bash
-cd ..
-```
+If you are not seeing the line that says `+CIFSR:STAIP,"192.168.1.123"`, something is wrong with the network name and password. Check both to make sure they are right.
 
-The `cd` command, which stands for "change directory,"
-allows you to enter a different directory, like you would in 
-a file explorer.
-
-`..` means the parent directory, analogous to pressing the up button in
-a file explorer. 
-
-### Basic bash commands
-
-| Command | Example  | Description |
-| ------- | -------- | ----------- |
-| cd      | cd hello | Change directory, the example changes into the `hello` directory. `..` represents the parent directory. |
-| ls      | ls       | List files in the current directory |
-| pwd     | pwd      | Prints the path to the current directory |
-
-
-With this in mind, move into the directory `/etc/wpa_supplicant` with the `cd` command.
-
-In this directory, there are files for configuring wifi connections. 
-
-In the command prompt, type:
-
-```bash
-nano wpa_supplicant.conf
-```
-
-Which should open a text editor, were you can use the arrow keys on the keyboard to move around.
-
-There should be a section that looks like:
-
-```conf
-network={
-    SSID="<INSERT SSID HERE>"
-    psk="<INSERT PASSPHRASE HERE>"
-}
-```
-
-Inside those quotes, insert the ssid (wifi name) and passphrase for your wireless network. Then reboot the pi:
-
-```bash
-sudo reboot
-```
-
-It should be on the network now. To check that, run the following command:
-
-```bash
-iwgetid
-```
-
-if everyting is configurd properly, it should print the SDID for your network.
-
-### Step 3: Get the IP
-
-In the command prompt, type
-
-```bash
-ip addr
-```
-
-Which should have an output like this:
-
-```
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host 
-       valid_lft forever preferred_lft forever
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
-    link/ether b8:27:eb:b2:96:ab brd ff:ff:ff:ff:ff:ff
-3: wlan0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc pfifo_fast state DOWN group default qlen 1000
-    link/ether b8:27:eb:e7:c3:fe brd ff:ff:ff:ff:ff:ff
-    inet 192.168.1.127/24 brd 192.168.1.255 scope global eth0 <-- this is what you want
-       valid_lft forever preferred_lft forever
-    inet6 fe80::99ac:80cd:225c:f16/64 scope link 
-       valid_lft forever preferred_lft forever
-
-```
-
-Under `wlan0`, which is the name of the wireless chip on the raspberry pi, look for a line starting with `inet`. The numbers, up to the slash, is the 
-IP address of the raspberry PI. In the example output above, the ip is `192.168.1.127`. An IP address is like a regular address but for computers--it allows computers to send messages to each other remotely.
-
-On another computer connected to the same network, open a web browser and go to `http://<IP ADDRESS>`, replaceing `<IP ADDRESS>` with your actual IP address. You should be able to see the web server.
+If you have the IP address, congratulations! The arduino is fully set up.
