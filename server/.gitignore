@@ -1,3 +1,5 @@
 server*
 *-packr.go
 data.db
+tools/datagen
+tools/simulator
