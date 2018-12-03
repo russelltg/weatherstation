@@ -57,5 +57,8 @@ This solution is much more complex, but also teaches a more diverse skillset and
 ## Lesson plans
 The lesson plans can be found under [`lessons`](lessons).
 
+## Assignments
+There are assignments to go along with lesson plans in the [lessons](lessons) directory. The keys are located in the [arduino](arduino/assigmentkeys), but are only for teachers to use. Visit the [lessons README.md](lessons/README.md) for more information.
+
 ## Help
 If you encounter issues with the arduino, you can visit the [`issues page`](lessons/issues.md) at `lessons`->`issues.md` for some tips on fixing your issues quickly.
