@@ -26,6 +26,6 @@ void loop() {
 }
 ```
 
-> ***WARNING: This code is very, very broken. Don't assume that anything in it works as it should***
+> ***WARNING: This code is very, very broken. Don't assume that anything in it works as it should.***
 
 Good luck!
