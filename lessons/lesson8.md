@@ -1,4 +1,4 @@
-# How to connect to a weather Station
+# Lesson 8: How to connect to a weather Station
 
 If you already have the raspberry pi setup and the weather station running from lessons 6 and 7, you are all ready to connect to the station.
 

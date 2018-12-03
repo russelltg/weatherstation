@@ -1,4 +1,4 @@
-# Lesson 6: Setting up the complex weather station [~60 minutes]
+# Lesson 6: Setting up the arduino for a complex weather station [~60 minutes]
 
 In order to have the full weather station, we must first setup the arduino.
 

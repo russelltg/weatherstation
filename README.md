@@ -6,7 +6,9 @@
 
 This repository houses an arduino based weather station. It has lesson plans to teach students everything from the basics of coding up to how to set up an internet connected weather station.
 
-To get started, head over to `lessons`->[`lesson1.md`](lessons/lesson1.md).
+To get started, head over to [`lessons`](lessons)->[`lesson1.md`](lessons/lesson1.md). Or, if you would like to see all of the lessons and the general lesson plan, visit the readme file for the lessons [here](lessons/README.md).
+
+If you are just looking to connect to the hyperlocal weather station network, visit [`lesson 8`](lessons/lesson8.md).
 
 ## Required Hardware
 
@@ -50,10 +52,10 @@ The minimal solution is just a arduino with sensors, and an LCD panel to show th
 
 ### The server solution
 
-This solution is much more complex, but also teaches a more diverse skillset and is much more useful to the students and the community as a final product.
+This solution is much more complex, but also teaches a more diverse skillset and is much more useful to the students and the community as a final product. This solution begins in [`lesson 6`](lessons/lesson6).
 
 ## Lesson plans
 The lesson plans can be found under [`lessons`](lessons).
 
 ## Help
-If you encounter issues with the arduino, you can visit the [issues page](lessons/issues.md) at `lessons`->`issues.md` for some tips on fixing your issues quickly.
+If you encounter issues with the arduino, you can visit the [`issues page`](lessons/issues.md) at `lessons`->`issues.md` for some tips on fixing your issues quickly.
