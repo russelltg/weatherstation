@@ -23,6 +23,9 @@ If you are just looking to connect to the hyperlocal weather station network, vi
 * Adafruit wind sensor
 * Breadboard
 * Jumper cables
+* HDMI monitor + cable
+* USB Keyboard
+* microSD card reader
 
 
 ## Directory Structure

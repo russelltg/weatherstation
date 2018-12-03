@@ -7,11 +7,11 @@ for you, you will just need to set it up.
 
 ## Step 1: Flashing the ISO
 The Raspberry Pi comes with a built-in micro SD slot, so we need to install the server on it.
-A image file (.iso) has been prepared with all the required software to run the server,
+A disk image file (.iso) has been prepared with all the required software to run the server,
 all you have to do is install it.
 
-Download the ISO file from [here](https://github.com/russelltg/weatherstation/releases/download/v0.1/weatherstation.zip), and [install the etcher tool](https://www.balena.io/etcher/) that
-can be used to flash images.
+Download the .zip file from [here](https://github.com/russelltg/weatherstation/releases/download/v0.2/weatherstation.zip), 
+and [install the etcher tool](https://www.balena.io/etcher/), which will be used to install the disk image onto the microSD card.
 
 Insert the microsd card into your computer (you will need some sort of micro sd card reader), and open etcher:
 
