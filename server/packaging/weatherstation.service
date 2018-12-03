@@ -2,4 +2,4 @@
 Restart=always
 ExecStart=/opt/weatherstation/server
 WorkingDirectory=/opt/weatherstation
-User=root
+User=pi
