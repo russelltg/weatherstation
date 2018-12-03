@@ -30,13 +30,16 @@ Put the SD card back into the
 ## Step 2: Configuring wireless
 
 Plug the raspberry pi into a keyboard and
-monitor via USB and HDMI respectively.
+monitor via USB and HDMI respectively. Power it on by plugging in the mini-usb power cord.
+When it boots, you should be prompted with:
+
+![](images/Login.jpg)
 
 You should be left at a prompt for a username and
 password. The default is `pi` for username and
-`raspberry` for password:
-
-![](IMAGHERE)
+`raspberry` for password. Note when you are entering the
+password, it will not show anything so that the password is not
+displayed on the screen.
 
 ### Tour of Bash (the linux terminal)
 
@@ -70,6 +73,8 @@ a file explorer.
 | cd      | cd hello | Change directory, the example changes into the `hello` directory. `..` represents the parent directory. |
 | ls      | ls       | List files in the current directory |
 | pwd     | pwd      | Prints the path to the current directory |
+| rm      | rm hello.txt | Deleted a file |
+| cat     | cat hello.txt | Print the contents of a file |
 
 
 With this in mind, move into the directory `/etc/wpa_supplicant` with the `cd` command.
