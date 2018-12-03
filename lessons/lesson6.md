@@ -1,19 +1,31 @@
-# Lesson 6: Setting up the raspberry pi server (~30 mins)
+# Lesson 6: Setting up the raspberry pi server [~30 minutes]
 
 In this lesson, you will learn how to setup a simple Raspberry Pi server.
 
 Servers are quite complex in nature, so most of the heavy lifting has been done
-for you, you will just need to set it.
+for you, you will just need to set it up.
 
 ## Step 1: Flashing the ISO
 The Raspberry Pi comes with a built-in micro SD slot, so we need to install the server on it.
 A image file (.iso) has been prepared with all the required software to run the server,
 all you have to do is install it.
 
-Download the ISO file from [here](INSERT LINK), and [install the etcher tool](https://www.balena.io/etcher/) that
+Download the ISO file from [here](https://github.com/russelltg/weatherstation/releases/download/v0.1/weatherstation.zip), and [install the etcher tool](https://www.balena.io/etcher/) that
 can be used to flash images.
 
-Insert the microsd card into your computer (you will need some sort of micro sd card reader), and open etcher.
+Insert the microsd card into your computer (you will need some sort of micro sd card reader), and open etcher:
+
+![](images/Etcher.png)
+
+Click select image, and select the `.zip` file you just downloaded:
+
+![](images/EtcherSelect.png)
+
+Click select drive and select the microsd card:
+
+![](images/EtcherSelDrive.png)
+
+Put the SD card back into the 
 
 ## Step 2: Configuring wireless
 
@@ -22,7 +34,9 @@ monitor via USB and HDMI respectively.
 
 You should be left at a prompt for a username and
 password. The default is `pi` for username and
-`raspberry` for password.
+`raspberry` for password:
+
+![](IMAGHERE)
 
 ### Tour of Bash (the linux terminal)
 
@@ -65,7 +79,7 @@ In this directory, there are files for configuring wifi connections.
 In the command prompt, type:
 
 ```bash
-nano wpa_supplicant.conf
+sudo nano wpa_supplicant.conf
 ```
 
 Which should open a text editor, were you can use the arrow keys on the keyboard to move around.
@@ -124,4 +138,4 @@ Which should have an output like this:
 Under `wlan0`, which is the name of the wireless chip on the raspberry pi, look for a line starting with `inet`. The numbers, up to the slash, is the 
 IP address of the raspberry PI. In the example output above, the ip is `192.168.1.127`. An IP address is like a regular address but for computers--it allows computers to send messages to each other remotely.
 
-On another computer connected to the same network, open a web browser and go to `http://<IP ADDRESS>`, replaceing `<IP ADDRESS>` with your actual IP address. You should be able to see the web server.
+On another computer connected to the same network, open a web browser and go to `http://<IP ADDRESS>`, replacing `<IP ADDRESS>` with your actual IP address. You should be able to see the web server.
