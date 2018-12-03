@@ -52,10 +52,10 @@ The minimal solution is just a arduino with sensors, and an LCD panel to show th
 
 ### The server solution
 
-This solution is much more complex, but also teaches a more diverse skillset and is much more useful to the students and the community as a final product. This solution begins in [`lesson 6`](lessons/lesson6).
+This solution is much more complex, but also teaches a more diverse skillset and is much more useful to the students and the community as a final product. This solution begins in [`lesson 6`](lessons/lesson6.md).
 
 ## Lesson plans
-The lesson plans can be found under [`lessons`](lessons).
+The lesson plans can be found under [`lessons`](lessons/README.md).
 
 ## Assignments
 There are assignments to go along with lesson plans in the [lessons](lessons) directory. The keys are located in the [arduino](arduino/assigmentkeys), but are only for teachers to use. Visit the [lessons README.md](lessons/README.md) for more information.
