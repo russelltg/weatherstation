@@ -3,3 +3,7 @@ Restart=always
 ExecStart=/opt/weatherstation/server
 WorkingDirectory=/opt/weatherstation
 User=pi
+
+[Install]
+WantedBy=multi-user.target
+
