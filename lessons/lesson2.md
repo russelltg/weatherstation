@@ -59,12 +59,14 @@ Search for 'Adafruit Unified Sensor' in the search bar and install the library:
 
 ![](images/AdafruitUnified.png)
 
+> *For some reason, `Adafruit Unified Sensor` always ends up at the bottom of the search results. Make sure the library you install matches perfectly with this*
+
 And also install 'DHT sensor library' by adafruit:
 
 ![](images/DHTLib.png)
 
 Now, to make sure that it installed correctly, insert `#include <DHT.h>`
-at the very top of your arduino code (even before `void setup`) and 
+at the very top of your arduino code (even before `void setup`) and
 click the check button, ensuring no errors.
 
 ### Writing the code
@@ -86,7 +88,7 @@ and DHT22 sensors, so we must indicate that it's a DHT22 chip.
 Next, in the `setup` function (between the `{` and `}`), add the following lines of code:
 
 ```C++
-Serial.begin();
+Serial.begin(9600);
 dhtSensor.begin();
 ```
 
@@ -100,24 +102,7 @@ Serial.println(temp);
 delay(1000);
 ```
 
-for a full source code of:
-
-```C++
-#include <DHT.h>
-
-DHT dhtSensor(7, DHT22);
-
-void setup() {
-    Serial.begin(9600);
-    dhtSensor.begin();
-}
-
-void loop() {
-    float temp = dhtSensor.readTemperature();
-    Serial.println(temp);
-    delay(1000);
-}
-```
+If you can't understand it fully, there is a full version of the code in the arduino folder on github called [dhtSensorSetup.ino](../arduino/dhtSensorSetup/dhtSensorSetup.ino).
 
 `dhtSensor.readTemperature()` is a function that gets the
 temperature reading from the sensor, and it is then stored to

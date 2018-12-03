@@ -190,7 +190,7 @@ int cleanTheRoom(int roomNumber) {
   delay(6000);
   Serial.print("Room ");
   Serial.print(roomNumber);
-  Serial.println(" is clean!")l;
+  Serial.println(" is clean!");
 }
 
 void setup() {
