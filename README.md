@@ -1,49 +1,59 @@
 # Arduino Weather Station
 
-This repository has code to setup an arduino weather station that
-streams realtime sensor data to a server, which can be connected to via
-a web browser for visualization
+[![HitCount](http://hits.dwyl.com/{username}/{project-name}.svg)](http://hits.dwyl.com/{username}/{project-name})
+![](https://img.shields.io/badge/built%20for-Tumaini%20Innovation%20Center-brightgreen.svg)
+![](https://img.shields.io/badge/built%20by-St.%20Anchormould-brightgreen.svg)
+
+This repository houses an arduino based weather station. It has lesson plans to teach students everything from the basics of coding up to how to set up an internet connected weather station.
+
+To get started, head over to `lessons`->[`lesson1.md`](lessons/lesson1.md).
 
 ## Required Hardware
 
+* Computer with the arduino IDE installed
 * Arduino Uno
-* 
+* USB cable for connection to a PC
+* Raspberry pi
+* Micro SD card
+* Battery pack
+* LCD panel
+* DHT22 temperature and wind sensor
+* Adafruit wind sensor
+* Breadboard
+* Jumper cables
+
 
 ## Directory Structure
 
+### `lessons`
+
+The `lessons` directory houses the lessons that will teach students the basics of arduino programming. These lessons will then take them all the way through the creation of both a simple and complex weather station as they gain more and more knowlede about arduino programming. This is where students and teachers should start.
+
 ### `arduino`
 
-The `arduino` directory contains two `.ino` C++ files, one for a simple
-solution, and another for the more complex solution that streams data to
-a server. Both of these solutions are described below.
+The `arduino` directory contains two `.ino` C++ files, one for a simple solution, and another for the more complex solution that streams data to a server. Both of these solutions are described below. Students should use the files in this director
 
 ### `server`
 
-The `server` directory contains the source files for a server that
-receives sensor data from the arduino weather station and can
-then serve and stream the data to web clients. It is written in
+The `server` directory contains the source files for a server that receives sensor data from the arduino weather station and can then serve and stream the data to web clients. It is written in
  [Golang](https://golang.org).
 
 ### `data-visualizer`
 
-The `data-visualizer` directory contains the source files for the web
-client. It is written in Typescript with the React framework, using the
-material-ui component kit.
+The `data-visualizer` directory contains the source files for the web client. It is written in Typescript with the React framework, using the material-ui component kit.
 
 ## Solution Descriptions
 
 ### The minimal solution
 
-The minimal solution is just a arduino with sensors, and an LCD panel
-to show the sensor data. It it a great introductory project to arduino,
-and has some real-world usability. 
+The minimal solution is just a arduino with sensors, and an LCD panel to show the sensor data. It it a great introductory project to arduino, and has some real-world usability.
 
 ### The server solution
 
-This solution is much more complex, but also teaches a more diverse
-skillset and is much more useful to the students and the community
-as a final product
-
+This solution is much more complex, but also teaches a more diverse skillset and is much more useful to the students and the community as a final product.
 
 ## Lesson plans
 The lesson plans can be found under [`lessons`](lessons).
+
+## Help
+If you encounter issues with the arduino, you can visit the [issues page](lessons/issues.md) at `lessons`->`issues.md` for some tips on fixing your issues quickly.
