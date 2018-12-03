@@ -114,3 +114,7 @@ and `delay(1000)` waits a second, to put spacing between temperature readings.
 
 Running this code and opening the serial monitor should print the current temperature,
 in celcius, very second.
+
+---
+
+If you have any issues with the arduino, visit the [issues page.](issues.md)

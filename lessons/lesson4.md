@@ -153,3 +153,7 @@ This code will read the temperature and humidity every 5 seconds. This is not th
 ---
 
 Congratulations, you are well on your way to being able to do whatever you want with programming. In the next lesson, we will use this knowledge to build a simple weather station!
+
+---
+
+If you have any issues with the arduino, visit the [issues page.](issues.md)

@@ -211,3 +211,7 @@ void main() {
 If your code doesn't look exactly like this but outputs what it should, that's perfectly fine. There is never just one way to make code do something, so having a solution that is different from the example above is perfectly acceptable. If your code doesn't output what you thought it would, continue editing and trying again. Looking back through code to find errors is what coding is all about.
 
 At this point, you have the basics of coding down. Next, we will move on to some special things the code can do in order to set up our weather station.
+
+---
+
+If you have any issues with the arduino, visit the [issues page.](issues.md)

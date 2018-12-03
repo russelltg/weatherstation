@@ -294,3 +294,7 @@ void loop() {
 If you got that, congratulations! You're well on your way to being able to learn everything there is to know about arduino programming. There is a lot left to learn, but you have demonstrated the necessary skills to get the job done!
 
 Now, as a reward, we are going to setup a super complicated weather station. We aren't going to fully explain this as it would take years and years to master programming well enough to create the station from scratch. So, we are just going to give you the instructions to set it up. Hopefully, you will find this project cool enough to continue learning to the point that you can create this on your own one day!
+
+---
+
+If you have any issues with the arduino, visit the [issues page.](issues.md)
