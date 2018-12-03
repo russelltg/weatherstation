@@ -22,25 +22,25 @@ In this tutorial, you will build the circuit shown above, then look back at the 
 
 Plug a cable from the 5V pin on the arduino to one of slots on the breadboard in the column marked `+`. Now, all of this column is essentially plugged into the 5 volt pin on the arduino. So, you now should plug the VCC/5V pin on the DHT temperature and humidity sensor. If the ground and data pins are connected like in lesson 2, you're set!
 
-Now, we have to connect the LCD panel. First, connect the pin labeled GND to the remaining GND pin on the arduino. Then, connect VCC to the `+` rail on the breadboard that is connected to the arduino. ***Note: this should be the same column that the DHT sensor is connected to.*** Then, connect the SDA pin on the LCD to pin A4 on the arduino, and connect the SCL pin on the LCD to pin A5 on the arduino.
-
-If you would like, you can plug the individual components into the breadboard so that the pins are parallel to the `+` column. Remember, each row (left to right) and column (top to bottom) are completely connected. This means that if you connect a sensor to the breadboard, you can then run a cable from a couple slots away while still connecting to the device. This is shown by the picture below.
-
 ![breadboard Example](images/BreadboardExample.JPG)
 
 > ***CAUTION: THE LEFT AND RIGHT SIDES OF THE BREADBOARD ARE NOT CONNECTED!!! IF YOU PUT SOMETHING ON ONE SIDE, IT MUST BE CONNECTED THROUGH A SLOT ON THAT SIDE!!!***
 
-While the image is slightly out of focus (the cables mess it up every time), you can still the the basic premise. The sensor is connected to the `+` column. The `+` column is then connected to the arduino. Therefore, the sensor is connected to the arduino. Use this idea when connecting the sensor and LCD to the arduino if you would like.
-
-> ***IF YOU CAN, USE A RED WIRE FOR ANYTHING CONNECTED TO 5 VOLTS OR 3.3 VOLTS. RED IS A UNIVERSAL SYMBOL FOR POWER. USE A BLACK CABLE FOR ANYTHING CONNECTED TO GROUND. ANY OTHER COLOR CAN BE USED FOR DATA LINES.***
+While the image is slightly out of focus (the cables mess it up every time), you can still the the basic premise. The sensor is connected to the `+` column. The `+` column is then connected to the arduino. Therefore, the sensor is connected to the arduino. Use this idea when connecting the sensor and LCD to the arduino if you would like. Remember, every pin in the `+` column is connected to each other.
 
 Following this convention using the red and black wires makes looking at the circuit easier. The image above does not follow this convention simply to show you a contrast between the two wires. Not using this convention is not the end of the world, but it will make your life a lot easier in the future.
 
+> ***IF YOU CAN, USE A RED WIRE FOR ANYTHING CONNECTED TO 5 VOLTS OR 3.3 VOLTS. RED IS A UNIVERSAL SYMBOL FOR POWER. USE A BLACK CABLE FOR ANYTHING CONNECTED TO GROUND. ANY OTHER COLOR CAN BE USED FOR DATA LINES.***
+
+Now, we have to connect the LCD panel. First, connect the pin labeled GND to the remaining GND pin on the arduino. Then, connect VCC to the + rail on the breadboard that is connected to the arduino. Note: this should be the same column that the DHT sensor is connected to. Then, connect the SDA pin on the LCD to pin A4 on the arduino, and connect the SCL pin on the LCD to pin A5 on the arduino.
+
+If you would like, you can plug the individual components into the breadboard so that the pins are parallel to the + column. Remember, each row (left to right) and column (top to bottom) are completely connected. This means that if you connect a sensor to the breadboard, you can then run a cable from a couple slots away while still connecting to the device. This is shown by the picture below.
+
 ---
 
-Congratulations! If you completed everything like stated above, you have successfully connected the parts like shown in the circuit diagram. Now, we just have to write the code for the arduino.
+If you have this down, congratulations! It's time to move on to coding!
 
-### Step three:
+---
 
 #### Coding the weather station
 
@@ -67,7 +67,7 @@ void setup() {
   lcd.backlight();
   lcd.setCursor(0,0);
   //The next two lines are unnecessary and is only here so you can tell if the LCD panel is working or not very quickly.
-  lcd.print("Initializing")
+  lcd.print("Initializing");
   delay(5000);
   lcd.clear();
 }
@@ -87,8 +87,10 @@ void loop() {
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Humidity:");
+  lcd.setCursor(0,1);
   lcd.print(humidity);
-  lcd.print (" %");
+  lcd.print ("%");
+  delay(5000);
 }
 ```
 
