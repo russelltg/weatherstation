@@ -39,6 +39,8 @@ password. The default is `pi` for username and
 password, it will not show anything so that the password is not
 displayed on the screen.
 
+Make sure to type in `pi` exactly for the username. Then hit enter. Next, type in `raspberry` in the password space and hit enter.
+
 ### Tour of Bash (the linux terminal)
 
 The linux terminal (aka bash, which stands for bourne again shell), is a extremely powerful tool
@@ -87,12 +89,14 @@ sudo nano wpa_supplicant.conf
 
 Which should open a text editor, were you can use the arrow keys on the keyboard to move around.
 
+If you cannot see the following text, you must have typed in the name of the file wrong. Make sure it is `sudo nano wpa_supplicant.conf` exactly. Also, make sure that you correctly entered the `cd /etc/wpa_supplicant` before doing this step.
+
 There should be a section that looks like:
 
 ```conf
 network={
-    SSID="<INSERT SSID HERE>"
-    psk="<INSERT PASSPHRASE HERE>"
+    SSID="INSERT SSID HERE"
+    psk="INSERT PASSPHRASE HERE"
 }
 ```
 
