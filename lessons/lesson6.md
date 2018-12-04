@@ -55,7 +55,7 @@ If nothing happens, make sure the bottom right says `115200 baud` and `Both NL &
 
 If it is working, type in `AT+CIOBAUD=9600` and hit enter. After a couple of seconds, you are done!
 
-At the bottom right, change `115200 baud` to `9600 baud` and restart both the serial monitor and the arduino IDE.
+At the bottom right, change `115200 baud` back to `9600 baud` and restart both the serial monitor and the arduino IDE.
 
 ##### Arduino code setup:
 

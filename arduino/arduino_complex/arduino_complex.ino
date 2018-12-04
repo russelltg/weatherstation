@@ -1,7 +1,7 @@
 #include "DHT.h"
 #include <SoftwareSerial.h>
 
-//i find that putting them here makes it easier to
+//I find that putting these define statments here makes it easier to
 //edit it when trying out new things
 
 #define RX_PIN 3
@@ -54,7 +54,7 @@ void upload_data(String sensor, float reading) {
   Serial.println(json.length());
 
   esp8266.println(String("AT+CIPSEND=0,") + json.length());
-  delay(10); // apparently this is important
+  delay(10); // Apparently this is important
   esp8266.println(json);
 
   int start = millis();
@@ -84,6 +84,18 @@ float windRead(){
   }
 }
 
+void printData(float temperature, float humidity, float windSpeed) {
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.println(" *C");
+  Serial.print("Humidity: ");
+  Serial.print(humidity);
+  Serial.println(" %");
+  Serial.print("Wind Speed: ");
+  Serial.print(windSpeed);
+  Serial.println(" km/hr");
+}
+
 void setup()
 {
   Serial.begin(9600);
@@ -95,7 +107,7 @@ void setup()
   Serial.println("Sensor init success!");
   delay(10);
 
-  esp8266.begin(ESP_BRATE); // I changed this
+  esp8266.begin(ESP_BRATE); // I changed this on the ESP to 9600
   while (!esp8266) {
     delay(10);
   }
@@ -140,7 +152,7 @@ void setup()
     //return;
   }
 
-  // get the ip of the arduino
+  // Get the ip of the arduino
   ret = at_command("AT+CIFSR", -1, &out);
   Serial.println(out);
   if (!ret) {
@@ -148,7 +160,7 @@ void setup()
     return;
   }
 
-  // setup the receiver to allow multiple connections at one time, which is
+  // Setup the receiver to allow multiple connections at one time, which is
   // required to run a server
   ret = at_command("AT+CIPMUX=1", -1, &out);
   Serial.println(out);
@@ -157,7 +169,7 @@ void setup()
     return;
   }
 
-  // setup a TCP server for the raspberry pi to connect to
+  // Setup a TCP server for the raspberry pi to connect to
   // 1 means create server
   // 2000 is the port, which is an arbitrary decision that is coded into the pi
   ret = at_command("AT+CIPSERVER=1,2000", -1, &out);
@@ -165,7 +177,7 @@ void setup()
   if (!ret) {
     Serial.println("Failed to setup the arduino as a TCP server on port 2000");
   }
-  // wifi is now setup and good to
+  // Wifi is now setup and good to
 }
 
 void loop()
@@ -178,21 +190,6 @@ void loop()
     upload_data("humidity", hum);
     delay(10);
     upload_data("wind", wind);
-    Serial.print("Temperature: ");
-    Serial.print(temp);
-    Serial.println(" *C");
-    Serial.print("Humidity: ");
-    Serial.print(hum);
-    Serial.println(" %");
-    Serial.print("Wind Speed: ");
-    Serial.print(wind);
-    Serial.println(" km/hr");
-    if(wind == 0) {
-      Serial.println("");
-      Serial.println("WARNING: Wind speed to low for accurate reading!");
-      Serial.println("Wind Speed < 0.5 km/hr");
-    }else{
-      Serial.println("Wind reading nominal");
-    }
+    printData(temp, hum, wind);
     delay(5000);
 }
