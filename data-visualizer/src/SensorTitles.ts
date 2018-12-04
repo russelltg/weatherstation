@@ -9,7 +9,7 @@ const sensorTitles = {
     },
     wind: {
         displayName: "Wind",
-        units: "m/s"
+        units: "kmh"
     },
 };
 
