@@ -12,11 +12,11 @@ Let's get started!
 
 ### Step one: Connecting to the raspberry pi
 
-On a device connected to the same wifi network as the raspberry pi, open up a web browser. Head to the top where you would enter in a website, and enter the IP address of the raspberry pi followed by `:8080`.
+On a device connected to the same wifi network as the raspberry pi, open up a web browser. Head to the top where you would enter in a website, and enter the IP address of the raspberry pi.
 
 > Example
 ```
-192.168.1.130:8080
+192.168.1.130
 ```
 This will connect to a raspberry pi with an IP address of `192.168.1.130`.
 
@@ -48,4 +48,6 @@ To ensure the arduino is sending data, you can plug it into the computer and ope
 
 > ALSO NOTE: IF SOMETHING ISN'T WORKING RIGHT WITH THE GRAPHS DISPLAYING, SIMPLY REFRESH THE PAGE. THIS WILL FIX ERRORS IN DISPLAYING!
 
-At this point, you should be good to go. Anyone connected to the network can now enter the IP address followed by `:8080` and connect to the sensors!
+At this point, you should be good to go. Anyone connected to the network can now enter the IP address of the raspberry pi and connect to the sensors!
+
+This is the end of the lessons. Congratulations on the setup of your new hyperlocal weather network!

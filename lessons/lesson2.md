@@ -118,3 +118,5 @@ in celcius, very second.
 ---
 
 If you have any issues with the arduino, visit the [issues page.](issues.md)
+
+You can continue with lesson 3 [here](lesson3).

@@ -300,3 +300,5 @@ But, before you move on, please complete assignments 2 and 3. They can be found 
 ---
 
 If you have any issues with the arduino, visit the [issues page.](issues.md)
+
+You can continue with lesson 6 [here](lesson6).

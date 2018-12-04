@@ -17,7 +17,7 @@ The lessons are split into three parts. Lesson one is a basic tutorial and intro
 * [Lesson 5: Simple weather station creation](lesson5.md)
 
 ##### Complex station setup:
-* [Lesson 6: Setting up the arduino for acomplex weather station](lesson6.md)
+* [Lesson 6: Setting up the arduino for a complex weather station](lesson6.md)
 * [Lesson 7: Setting up the raspberry pi server](lesson7.md)
 * [Lesson 8: How to connect to a weather Station](lesson8.md)
 
