@@ -44,6 +44,8 @@ At this point, everything is set up. If no data starts coming in, unplug the ras
 
 To ensure the arduino is sending data, you can plug it into the computer and open the serial monitor. It should *NOT* say `Failed to send data to pi`. If this is the case, restart the arduino. Check the wifi name and password are correct and that the wifi network is the same as the one the raspberry pi is on. Also, check to see that the pi is working properly and is connected to the network.
 
+***IF AT ANY POINT IN TIME THE ARDUINO IS DISCONNECTED, IT WILL PROBABLY NOT CONNECT TO THE RASPBERRY PI! YOU MUST UNPLUG THE RASPBERRY PI AND PLUG IT BACK IN FOR THE TWO TO RECONNECT! DO NOT FORGET THIS!!!!!***
+
 > NOTE: Right after the system is setup, there will not be enough data to display charts that are set to 1 day. Therefore, you must select 1 minute to see the live data. After the station has been running for quite some time, you can use the 1 day feature to see the data over a large period of time!
 
 > ALSO NOTE: IF SOMETHING ISN'T WORKING RIGHT WITH THE GRAPHS DISPLAYING, SIMPLY REFRESH THE PAGE. THIS WILL FIX ERRORS IN DISPLAYING!
