@@ -107,7 +107,7 @@ network={
 
 > CAUTION: MAKE SURE THE WIFI NAME AND PASSPHRASE YOU ENTER IS THE SAME AS THE WIFI NETWORK THE ARDUINO IS CONNECTED TO OR THE TWO WILL NOT BE ABLE TO WORK TOGETHER!
 
- When you are done editing the wifi name and passphrase, hit `CONTROL + O`, then `ENTER`, then `CONTROL + X` to save. Then reboot the pi using the following command:
+ When you are done editing the wifi name and passphrase, hit `CONTROL + O` (***Make sure this command is CTRL + 'OH', not CTRL + 'ZERO'***), then `ENTER`, then `CONTROL + X` to save. Then reboot the pi using the following command:
 
 ```bash
 sudo reboot
