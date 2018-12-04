@@ -82,3 +82,5 @@ Write down the number in the spot that `192.168.1.123` is. This is the IP addres
 If you are not seeing the line that says `+CIFSR:STAIP,"192.168.1.123"`, something is wrong with the network name and password. Check both to make sure they are right.
 
 If you have the IP address, congratulations! The arduino is fully set up.
+
+You can continue with lesson 7 [here](lesson7).

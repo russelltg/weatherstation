@@ -161,3 +161,5 @@ For instance, the picture below is connected to a raspberry pi with an IP addres
 ![](images/HyperStationStartup.png)
 
 If all steps were successfully completed, you should see a page very similar to the image above, but the graphs showing data will, more than likely, not exist. This is because the arduino and the raspberry pi have not been linked together yet. In [lesson 8](lesson8.md), we will link the two, finishing the setup.
+
+You can continue with lesson 8 [here](lesson8).

@@ -157,3 +157,5 @@ Congratulations, you are well on your way to being able to do whatever you want 
 ---
 
 If you have any issues with the arduino, visit the [issues page.](issues.md)
+
+You can continue with lesson 5 [here](lesson5).

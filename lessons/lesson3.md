@@ -217,3 +217,5 @@ But, before you move on, please complete assignment 1. It can be found [here](as
 ---
 
 If you have any issues with the arduino, visit the [issues page.](issues.md)
+
+You can continue with lesson 4 [here](lesson4).

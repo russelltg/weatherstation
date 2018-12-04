@@ -49,3 +49,5 @@ To ensure the arduino is sending data, you can plug it into the computer and ope
 > ALSO NOTE: IF SOMETHING ISN'T WORKING RIGHT WITH THE GRAPHS DISPLAYING, SIMPLY REFRESH THE PAGE. THIS WILL FIX ERRORS IN DISPLAYING!
 
 At this point, you should be good to go. Anyone connected to the network can now enter the IP address of the raspberry pi and connect to the sensors!
+
+This is the end of the lessons. Congratulations on the setup of your new hyperlocal weather network!
