@@ -1,7 +1,7 @@
 #include "DHT.h"
 #include <SoftwareSerial.h>
 
-//i find that putting them here makes it easier to 
+//i find that putting them here makes it easier to
 //edit it when trying out new things
 
 #define RX_PIN 3
@@ -10,7 +10,7 @@
 #define DHT_PIN 7
 #define DHT_TYPE DHT22
 #define WIND_SENSOR_PIN A0
- 
+
 float voltageConversionConstant = .004882814;
 
 DHT sensor(DHT_PIN, DHT_TYPE);
@@ -64,7 +64,7 @@ void upload_data(String sensor, float reading) {
     if (line == "ERROR\r") {
       Serial.println("Failed to send data to pi");
       break;
-    } 
+    }
     if (line == "SEND OK\r") {
       Serial.println("Succeeded in sending data to pi");
       break;
@@ -77,7 +77,7 @@ float windRead(){
   float voltage = analogValue * voltageConversionConstant;
   float windSpeed = (voltage - 0.4) * 32.4/(2 - 0.4);
   float windSpeedKm = windSpeed * 3.6;
-  if(windSpeed < 3 ){
+  if(windSpeed < 0.5 ){
     return 0;
   }else{
     return windSpeed;
@@ -94,7 +94,7 @@ void setup()
   sensor.begin();
   Serial.println("Sensor init success!");
   delay(10);
-  
+
   esp8266.begin(ESP_BRATE); // I changed this
   while (!esp8266) {
     delay(10);
@@ -165,11 +165,11 @@ void setup()
   if (!ret) {
     Serial.println("Failed to setup the arduino as a TCP server on port 2000");
   }
-  // wifi is now setup and good to   
+  // wifi is now setup and good to
 }
 
 void loop()
-{ 
+{
     float temp = sensor.readTemperature();
     float hum = sensor.readHumidity();
     float wind = windRead();
@@ -190,7 +190,7 @@ void loop()
     if(wind == 0) {
       Serial.println("");
       Serial.println("WARNING: Wind speed to low for accurate reading!");
-      Serial.println("Wind Speed < 3 km/hr");
+      Serial.println("Wind Speed < 0.5 km/hr");
     }else{
       Serial.println("Wind reading nominal");
     }
