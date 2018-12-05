@@ -186,10 +186,11 @@ void loop()
     float hum = sensor.readHumidity();
     float wind = windRead();
     upload_data("temp", temp);
-    delay(10);
+    delay(1000);
     upload_data("humidity", hum);
-    delay(10);
+    delay(1000);
     upload_data("wind", wind);
+    delay(1000);
     printData(temp, hum, wind);
-    delay(5000);
+    delay(2000);
 }
