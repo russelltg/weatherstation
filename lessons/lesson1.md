@@ -1,12 +1,12 @@
 # Lesson 1: Setting up the Arduino IDE and tour of the Arduino [~10 minutes]
 
-In order to install arduino code onto an arduino, you need the Arduino IDE (Integrated Development Environment), 
-which allows you to program arduino applications and install them onto arduios. 
-Installer packages can be found on the [arduino site](https://www.arduino.cc/en/Main/Software#download). 
+In order to install arduino code onto an arduino, you need the Arduino IDE (Integrated Development Environment),
+which allows you to program arduino applications and install them onto arduino.
+Installer packages can be found on the [arduino site](https://www.arduino.cc/en/Main/Software#download).
 
-Next, plug in the arudino to the computer that the Arduino IDE was installed on. Lights should come up on the aruduino, indicating that it has power.
+Next, plug in the arduino to the computer that the Arduino IDE was installed on. Lights should come up on the arduino, indicating that it has power.
 
-Next, start the IDE, it should look like this: 
+Next, start the IDE, it should look like this:
 
 ![Basic IDE](images/IDE.png)
 
@@ -47,7 +47,7 @@ When you press upload, it will prompt you to choose a directory to
 save your sketch in. Choose wherever you desire, the default location
 works fine.
 
-In order to get the arduino to do someting, we need to add code. In the `setup` function, add the following lines of code between the `{` and `}`
+In order to get the arduino to do something, we need to add code. In the `setup` function, add the following lines of code between the `{` and `}`
 after `setup`:
 
 ```C++
@@ -85,14 +85,16 @@ TODO INSERT IMAGE
 ![](images/Arduino.jpg)
 > Image source: https://store.arduino.cc/usa/arduino-uno-rev3
 
-On the top of the arduino, there are digital input and output pins, labeled from 0 to 13, 
+On the top of the arduino, there are digital input and output pins, labeled from 0 to 13,
 making for 14 digital pins total. Digital means that the pins will represent either a 1
 or a 0, so either some positive voltage (for a 1) or a zero voltage (for a zero).
 
-On the lower right, there is the analog pins, labeled A0 througth A5, for 6 pins. 
+On the lower right, there is the analog pins, labeled A0 through A5, for 6 pins.
 Analog pins input a voltage that varies between 0 and 1.
 
 In this project you will use both digital and analog pins.
 
-On the lower middle of the arduino, there is the power section, which provides ground pins and pins 
+On the lower middle of the arduino, there is the power section, which provides ground pins and pins
 that are +5V and +3.3V with respect to ground. These will be used later when wiring up various sensors.
+
+You can continue with lesson 2 [here](lesson2).
