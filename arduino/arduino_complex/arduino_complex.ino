@@ -77,7 +77,7 @@ float windRead(){
   float voltage = analogValue * voltageConversionConstant;
   float windSpeed = (voltage - 0.4) * 32.4/(2 - 0.4);
   float windSpeedKm = windSpeed * 3.6;
-  if(windSpeed < 0.5 ){
+  if(windSpeed < 0.7 ){
     return 0;
   }else{
     return windSpeed;
