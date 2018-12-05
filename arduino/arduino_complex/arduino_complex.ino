@@ -104,7 +104,7 @@ void setup()
   }
 
   sensor.begin();
-  Serial.println("Sensor init success!");
+  Serial.println("INITIALIZING NETWORK CONNECTION");
   delay(10);
 
   esp8266.begin(ESP_BRATE); // I changed this on the ESP to 9600
@@ -185,6 +185,10 @@ void loop()
     float temp = sensor.readTemperature();
     float hum = sensor.readHumidity();
     float wind = windRead();
+    if(wind < 0.7) {
+      wind = 0;
+      Serial.println("Wind read ERROR! Displaying 0 km/hr.");
+    }
     upload_data("temp", temp);
     delay(1000);
     upload_data("humidity", hum);
