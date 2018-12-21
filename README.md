@@ -1,10 +1,12 @@
-# Arduino Weather Station
+# Arduino Weather Station (HyperStation)
 
 [![HitCount](http://hits.dwyl.com/{username}/{project-name}.svg)](http://hits.dwyl.com/{username}/{project-name})
 ![](https://img.shields.io/badge/built%20for-Tumaini%20Innovation%20Center-brightgreen.svg)
 ![](https://img.shields.io/badge/built%20by-St.%20Anchormould-brightgreen.svg)
 
 This repository houses an arduino based weather station. It has lesson plans to teach students everything from the basics of coding up to how to set up an internet connected weather station.
+
+An introductory video describing the project can be found [here](https://www.youtube.com/watch?v=sxOYXKh8s5U)
 
 To get started, head over to [`lessons`](lessons)->[`lesson1.md`](lessons/lesson1.md). Or, if you would like to see all of the lessons and the general lesson plan, visit the readme file for the lessons [here](lessons/README.md).
 
