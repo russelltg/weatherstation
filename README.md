@@ -1,6 +1,5 @@
 # Arduino Weather Station (HyperStation)
 
-[![HitCount](http://hits.dwyl.com/{username}/{project-name}.svg)](http://hits.dwyl.com/{username}/{project-name})
 ![](https://img.shields.io/badge/built%20for-Tumaini%20Innovation%20Center-brightgreen.svg)
 ![](https://img.shields.io/badge/built%20by-St.%20Anchormould-brightgreen.svg)
 
